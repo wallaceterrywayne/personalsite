@@ -1,0 +1,19 @@
+---
+title: "Your Name"
+subtitle: "Mathematics Learning Specialist · Health Science Education"
+toc: false
+---
+
+I help pharmacy and nursing students build fluency in the math behind
+their professions. I design practice tools grounded in learning science,
+and I use AI as a development partner to build them at a scale one
+person couldn't manage alone.
+
+## Featured work
+
+- [**Daily Practice Apps for Pharmacy & Nursing Calculations**](portfolio/pharmacy-practice-app/index.qmd)
+  : spaced-repetition practice with a verified bank of generated problems.
+
+## Recent writing
+
+See the [blog](blog/index.qmd).
