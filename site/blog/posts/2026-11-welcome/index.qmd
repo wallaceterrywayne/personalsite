@@ -1,9 +1,0 @@
----
-title: "Welcome"
-description: "What this blog is about."
-date: 2026-11-01
-categories: [meta]
-draft: true
----
-
-*First post. Remove `draft: true` above when it's ready to publish.*

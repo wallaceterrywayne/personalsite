@@ -1,9 +1,0 @@
----
-title: "Portfolio"
-listing:
-  contents: "*/index.qmd"
-  type: grid
-  sort: "date desc"
-  fields: [image, title, description, date]
-toc: false
----
