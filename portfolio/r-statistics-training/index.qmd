@@ -1,0 +1,111 @@
+---
+title: "Statistical Analysis Trainer"
+description: "An AI-based statistical analysis training tool"
+date: 2026-11-02
+categories: [AI, Education, Instructional Design, Statistics]
+# bibliography: references.bib
+# csl: apa-6th-edition.csl
+draft: false
+resources:
+  - files/*
+---
+
+## The problem
+
+It can be difficult to learn a new technology, particularly one involved with finicky technical work such as statistics. AI, when properly used, can be immensely valuable in helping a student learn a new technology, and is able smooth the learning process out, helping to break down syntax, decode error messages, and identify coding bugs. This particular project was born from a self-study strategy I used personally to get a handle on the statistical language R, as well as adapting my workflow to more appropiately address the needs of students. 
+
+For students learning a new language, we want a workflow that enables students to learn independently, while keeping the responsibility for learning firmly on the student's shoulders. 
+
+## Design rationale
+
+### Workflow
+
+For new students learning game design and attempting to create their own games, a common adage is "finish a game as quickly as possible". It's important for a new learner to see all stages of game design to gain a better understanding of game design as a holistic process. When learning a new statistical langauge and learning how to perform a statistical analysis, I believe it is useful use a similar approach, and this trainer is an attempt to build a workflow to get a student producing a minimum viable statistical analysis in their language of choice as quickly as possible, and then checking the quality of that analysis against a vetted reference analysis on a pregenerated data set. 
+
+Following [principles of good design](/blog/posts/2026-11-ai-implementation-rules/index.qmd), we divide the workflow into two distinct stages, a planning stage and a reveal stage. Each stage begins with a new AI instance and has its own dedicated AI orientation documents and student briefs. The planning stage AI recieves its orientation document, the experimental design description, and the dataset. The reveal stage AI receives its own orientation document, the experimental design description, the dataset, as well as the solution key and the student's statistical report. This way each stage is kept independent, and the planning AI is unable to easily give away any information to the student. This was a common problem I encountered in my initial experiments with this workflow: an AI would be instructed not to reveal any information about the intended analysis, and then do something like name the dataset "logistic-regression-data.csv". 
+
+While initial experimentation had the AI generate the datasets and the experimental design descriptions on the spot (and it did surprisingly well at this), we found that this had the potential for subtle errors. For example, one analysis examined generated data about patient recovery after different types of heart surgeries. In this scenario, the variable length_of_stay measured the number of days post-surgery the patient stayed at the hospital, and this variable was intended to be correlated to the type of surgery. When the data was generated, however, this correlation was not implemented, which lead to a difference between the intended analysis and the actual data. Since these sorts of errors are hidden in sets of data, they can be difficult to spot, and so we avoid this problem by pre-generating and testing experimental design descriptions and datasets to ensure accuracy. 
+
+Each pregenerated dataset comes with a chance of having a potential complication in the data that the student must account for. The current list of possible complications is violations of assumptions, underpowered true effects, aliased variables, outcome-dependent variables, post-treatment variables, confounding variables, and unbalanced groups. This is an intential design choice to force the student to diligently check their assumptions and variables. Currently, zero to one complications are chosen when generating each dataset, and these complications are checked to make sure they measurably distort the outcomes of the analysis if not correctly handled with the exception of underpowered true effects. For underpowered true effects, these complications are not meant to distort the analysis, but to impress on the student that even a correct analysis can miss true effects due to random chance in sampling or underpowered experiments.
+
+### Dataset generator
+
+## Showcase
+
+### Stage 1
+
+::: {.panel-tabset}
+
+## Student brief
+
+::: {.file-box}
+{{< include files/_student-brief.md >}}
+:::
+
+## AI orientation
+
+::: {.file-box}
+{{< include files/_ai-orientation-1.md >}}
+:::
+
+
+## Experimental description
+
+::: {.file-box}
+{{< include files/_colectomy-description.md >}}
+:::
+
+## Dataset
+
+```{ojs}
+//| echo: false
+Inputs.table(FileAttachment("files/colectomy-data.csv").csv({typed: true}), {rows: 12})
+```
+
+## AI/Student chat log
+
+::: {.file-box}
+{{< include files/_chat-log-1.qmd >}}
+:::
+
+:::
+
+### Stage 2
+
+In stage 2, no substantive errors were found, so the only revision was to include relatively minor tweaks and typo fixes.
+
+::: {.panel-tabset}
+
+## Student report (rough)
+
+::: {.file-box}
+<iframe src="files/_student-report-1.html" width="100%" height="600" style="border:none;"></iframe>
+:::
+
+## AI orientation
+
+::: {.file-box}
+{{< include files/_ai-orientation-2.md >}}
+:::
+
+## Student report (revised)
+
+::: {.file-box}
+<iframe src="files/_student-report-2.html" width="100%" height="600" style="border:none;"></iframe>
+:::
+
+## AI/Student chat log
+
+::: {.file-box}
+{{< include files/_chat-log-2.qmd >}}
+:::
+
+## Review key
+
+::: {.file-box}
+{{< include files/_colectomy-review-key.md >}}
+:::
+
+:::
+
+## How AI was used

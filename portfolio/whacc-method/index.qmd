@@ -1,0 +1,120 @@
+---
+title: "WHACC Method"
+description: "A structured approach to dimensional analysis"
+date: 2026-11-02
+categories: [Dimensional Analysis, Education, Nursing, Pharmacy, Mathematics]
+# bibliography: references.bib
+# csl: apa-6th-edition.csl
+draft: false
+---
+
+## The problem
+
+Students in many health science programs, especially in nursing and pharmacy programs, often struggle with dosage calculations and related problems. While many methods exist (desired/have, proportional reasoning, dimensional analysis), dimensional analysis is often suggested as the most powerful and recommended by these programs. And, while dimensional analysis is by far the most robust method, many students still struggle with using it correctly. Students often struggle with identifying their target in setting up dimensional analysis problems, identifying irrelevant information, parsing the problem itself, and losing track of units. I developed the WHACC method to attempt to mitigate these issues. 
+
+## The WHACC Method
+
+The WHACC acronym stands for
+
+* Want,
+* Have,
+* Align,
+* Cancel, and
+* Calculate.
+
+We will explain the method as we look at an example problem of the sort that might be commonly seen in a nursing school program.
+
+>An order says to administer digoxin 0.5 mg IV daily. The drug concentration available from the pharmacy is digoxin 0.25 mg/mL, and the patient weighs 50 kg. How many mL will be administered over 5 days?
+
+In the WHACC method, the first step is the Want step. Here, the student is asked to identify and write down the units the problem wants. In this case, it wants milliliters.
+
+::: {.callout-note icon=false title="WHACC: Want"}
+>An order says to administer digoxin 0.5 mg IV daily. The drug concentration available from the pharmacy is digoxin 0.25 mg/mL, and the patient weighs 50 kg. How many mL will be administered over 5 days?
+
+**Want:** $\text{ mL}$
+:::
+
+The next step asks the student to identify all information they Have to work with. Importantly, we do **not** ask the student to identify relevant or irrelevant information. This step is only about getting numbers and units out of the problem to reduce cognitive load. 
+
+::: {.callout-note icon=false title="WHACC: Have"}
+>An order says to administer digoxin 0.5 mg IV daily. The drug concentration available from the pharmacy is digoxin 0.25 mg/mL, and the patient weighs 50 kg. How many mL will be administered over 5 days?
+
+**Want:** $\text{ mL}$
+
+**Have:** $\frac{0.5 \text{ mg}}{\text{day}}$, $\frac{0.25 \text{ mg}}{\text{mL}}$, $50 \text{ kg}$, $5 \text{ days}$
+:::
+
+With the Want and the Haves written down, the student is asked to begin the Align step. As dimensional analysis is commonly taught, no correct first term is typically required. For the WHACC method, the student is asked to align one of their Haves with a unit in the Want. In this case, the Want consists of only one unit, mL, so the student will align mL. They represent the Want with an unknown magnitude, typically x, and then begin building the standard dimensional analysis equation consisting of a chain of products of fractions. We also clarify that a unit "by itself" should be treated as being on top of a fraction. The student will then Align the relevant item in their Haves with the unit or units in the Want. The student's Haves only contain a single instance of mL, 0.25 mg/mL, so the student must begin there.
+
+::: {.callout-note icon=false title="WHACC: Align"}
+>An order says to administer digoxin 0.5 mg IV daily. The drug concentration available from the pharmacy is digoxin 0.25 mg/mL, and the patient weighs 50 kg. How many mL will be administered over 5 days?
+
+**Want:** $\text{ mL}$
+
+**Have:** $\frac{0.5 \text{ mg}}{\text{day}}$, $\frac{0.25 \text{ mg}}{\text{mL}}$, $50 \text{ kg}$, $5 \text{ days}$
+
+**Align:** 
+$$x \text{ mL} = \frac{1 \text{ mL}}{0.25 \text{ mg}} $$
+:::
+
+Now, the student can begin canceling unwanted units. The student is encouraged to ask themselves after every step "Do I have what I want yet?" or "Do my units match?".
+
+::: {.callout-note icon=false title="WHACC: Cancel"}
+>An order says to administer digoxin 0.5 mg IV daily. The drug concentration available from the pharmacy is digoxin 0.25 mg/mL, and the patient weighs 50 kg. How many mL will be administered over 5 days?
+
+**Want:** $\text{ mL}$
+
+**Have:** $\frac{0.5 \text{ mg}}{\text{day}}$, $\frac{0.25 \text{ mg}}{\text{mL}}$, $50 \text{ kg}$, $5 \text{ days}$
+
+**Cancel:** 
+$$x \text{ mL} = \frac{1 \text{ mL}}{0.25 \cancel{\text{ mg}}} \times \frac{0.5 \cancel{\text{ mg}}}{1 \text{ day}}$$
+:::
+
+Now, the student has eliminated the unwanted units of milligrams, and introduced unwanted units, days. From this point, the student will engage in the standard dimensional analysis algorithm, repeatedly switching back and forth between aligning and canceling units until both sides of the equation have matching units. They should continue to ask themselves "Do I have what I want?" after every step. That is the key to knowing when the algorithm terminates and to knowing what Haves are irrelevant.
+
+::: {.callout-note icon=false title="WHACC: Align & Cancel"}
+>An order says to administer digoxin 0.5 mg IV daily. The drug concentration available from the pharmacy is digoxin 0.25 mg/mL, and the patient weighs 50 kg. How many mL will be administered over 5 days?
+
+**Want:** $\text{ mL}$
+
+**Have:** $\frac{0.5 \text{ mg}}{\text{day}}$, $\frac{0.25 \text{ mg}}{\text{mL}}$, $50 \text{ kg}$, $5 \text{ days}$
+
+**Align & Cancel:** 
+$$x \text{ mL} = \frac{1 \text{ mL}}{0.25 \cancel{\text{ mg}}} \times \frac{0.5 \cancel{\text{ mg}}}{1 \cancel{\text{ day}}} \times \frac{5 \cancel{\text{ days}}}{1}$$
+:::
+
+Now, if the student is diligently checking their units after each step, they will notice that their units now match. Milliliters are the only units on both the left and right hand side of the equation. This is the signal to stop adding information. A student might want to use the $50 \text{ kg}$, but they can be redirected by asking "why" or by noting that they already have what they Want, so the kilograms do not help. Once their units match, they move on. 
+
+::: {.callout-note icon=false title="WHACC: Calculate"}
+>An order says to administer digoxin 0.5 mg IV daily. The drug concentration available from the pharmacy is digoxin 0.25 mg/mL, and the patient weighs 50 kg. How many mL will be administered over 5 days?
+
+**Want:** $\text{ mL}$
+
+**Have:** $\frac{0.5 \text{ mg}}{\text{day}}$, $\frac{0.25 \text{ mg}}{\text{mL}}$, $50 \text{ kg}$, $5 \text{ days}$
+
+**Calculate:** 
+$$x \text{ mL} = \frac{1 \text{ mL}}{0.25 \cancel{\text{ mg}}} \times \frac{0.5 \cancel{\text{ mg}}}{1 \cancel{\text{ day}}} \times \frac{5 \cancel{\text{ days}}}{1} = \frac{1 \times 0.5 \times 5 \text{ mL}}{0.25 \times 1 \times 1}$$
+:::
+
+For the calculate step, the student is encouraged to rewrite the right hand side of the equation as a single combined fraction before doing any calculation. This is to 1) give the student an opportunity to check their units, 2) reduce cognitive load by reducing a messy expression with lots of cancellations and marks, 3) make the expression safer and easier to enter into a calculator in a stressful, timed environment like an exam. Only then is the student allowed to enter anything into a calculator. 
+
+::: {.callout-note icon=false title="WHACC: Calculate"}
+>An order says to administer digoxin 0.5 mg IV daily. The drug concentration available from the pharmacy is digoxin 0.25 mg/mL, and the patient weighs 50 kg. How many mL will be administered over 5 days?
+
+**Want:** $\text{ mL}$
+
+**Have:** $\frac{0.5 \text{ mg}}{\text{day}}$, $\frac{0.25 \text{ mg}}{\text{mL}}$, $50 \text{ kg}$, $5 \text{ days}$
+
+**Calculate:** 
+$$x \text{ mL} = \frac{1 \text{ mL}}{0.25 \cancel{\text{ mg}}} \times \frac{0.5 \cancel{\text{ mg}}}{1 \cancel{\text{ day}}} \times \frac{5 \cancel{\text{ days}}}{1} = \frac{1 \times 0.5 \times 5 \text{ mL}}{0.25 \times 1 \times 1} = 10 \text{ mL}$$
+:::
+
+In the WHACC method, the student is discouraged from using a calculator at any point outside of the explicit Calculate step. Unit conversions, if they are necessary, can be folded into the standard align and calculate steps. This is to prevent "juggling" separate calculations and potentially losing track of units or what operations have or have not been done. This rule also reduces cognitive load in stressful exam conditions. The act of switching between writing on paper or a whiteboard to entering things into a calculator requires a student to change their focus, put down pencils or markers, and other little instances of cognitive load. For many students, this is magnified by their exam software, which requires them to use only a calculator in the exam software itself (for example, Examplify will provide a Desmos practice calculator to students for common nursing and pharmacy school exams). Since this computer-based calculator tends to be unfamiliar to them, switching back and forth would require even more load. To minimize this, we minimize the number of times a student has to switch by requiring that they save all calculations for the very end, after they have confirmed their units match.
+
+## Design rationale
+
+The align and cancel steps are largely standard dimensional analysis, while the want, have, and calculate steps are additional guidelines to help students break down the problem and avoid juggling separate calculations. Students sometimes get lost partway through a problem and lack a method for reorienting themselves. The Want step ensures that the student correctly identifies the target unit for the problem and displays it prominently if they need to reference it later. Students also sometimes struggle with parsing paragraphs filled with medical jargon, and the Have step encourages them to break the problems down into its relevant numbers and units. Students, especially students more used to the desired over have or proportional reasoning methods, often try to juggle calculations separately and lose track of their numbers and units. Restricting all calculations to the Calculate step attempts to mitigate that by forcing the student to wait and do all the calculations in a single shot. 
+
+Furthermore, the Want and Have steps serve as scaffolding that can be faded out over time as the student gains fluency with the method and the material.
+
+## Reflection

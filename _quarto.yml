@@ -1,0 +1,35 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Terry Wayne Wallace"
+  description: "Math learning support and AI-assisted tools for health science education"
+  site-url: "https://yourname.com"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: portfolio/index.qmd
+        text: Portfolio
+      - href: blog/index.qmd
+        text: Blog
+      - href: about.qmd
+        text: About
+    right:
+      - icon: envelope
+        href: "mailto:you@yourname.com"
+      - icon: rss
+        href: blog/index.xml
+  page-footer:
+    left: "© 2026 Terry Wayne Wallace"
+    right: "Views expressed here are my own."
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    css: styles.css
+    toc: true
+    html-math-method: katex

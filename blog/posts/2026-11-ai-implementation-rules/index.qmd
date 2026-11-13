@@ -1,0 +1,43 @@
+---
+title: "How to implement AI assignments in the classroom"
+description: "Common guidelines for ensuring your AI doesn't go rogue"
+date: 2026-11-09
+categories: [AI, Education, Instructional Design]
+bibliography: references.bib
+csl: apa-6th-edition.csl
+draft: false
+---
+
+In [this post](/blog/posts/2026-11-ai-instructor-framework/index.qmd) we examined some guidelines for deciding how much AI usage is appropriate for students at different levels, but we provide no rules for actually implementing AI effectively. In particular, once we start allowing the AI and the student to interact directly, we open up a huge range of outcomes that we have limited control over. Unfortunately, many of these outcomes are bad, and so we must take care in how such AI assignments are implemented. To that end, I propose some guidelines to help keep things on track, and ensure that the student experience matches what you had in mind.
+
+## Design Principles
+
+### Set clear expectations 
+
+Designing a good AI assignment isn't ultimately different from designing a good non-AI assignment. In both cases, setting clear expectations for all parties is critical. In the AI case, it's even more important, since the AI is another entity that needs to have clear expectations for its role in the assignment, and its role in the assigment *must* be crystal clear. I recommend included an orientation document as part of the packet of documents that is uploaded to the AI, as shown in my [statistics report trainer](/portfolio/r-statistics-training/index.qmd). For each stage of the project, along with the student-specific work, the AI receives an orientation.md file that outlines the overall project, which stage of the project is currently active, the specific actions the AI and the student should take during this stage, the desired outcome and deliverables of this stage, and the boundaries of permissible behavior for both the AI and the student. This is not a foolproof way of forcing the AI to act within the bounds you want to set for the assignment, but it goes a long way to priming the AI to create the right learning experience.
+
+Similarly, the expectations should be equally clear for the student as well. This might take the form of a student brief, as included in the aforementioned statistics report trainer, or some other form, but the instructions should be clear for the student as well. You might even considering an in-class activity walking through an example assignment together, where you play the role of a student participating in the assignment. If practical, you can even include the chat log of the walkthrough as part of the assignment instructions, so it's clear at each moment how the student should be engaging with the project. 
+
+### Use AI as little as possible
+
+This may seem somewhat contradictory given the general tone of the rest of this website, but bringing AI into an academic setting necessarily cedes control over part of the learning experience to that AI. If you can avoid doing this, then you should. This guidelines holds not just for the binary "should I use AI at all", but how much AI is used. For example, with my statistics report trainer, that project began as a personal project to help me learn R. During that time, I used the AI haphazardly to generate experimental designs and datasets on the spot. When adapting that experience to a student assignment as presented in the portfolio piece, that level of AI usage became unacceptably prone to subtle errors, so instead of having the AI generate designs and data on the spot, we restrict it to pre-made and vetted datasets generated using Python. While students can easily get practice problems directly from an AI, in my [pharmacy calculation practice tool](/portfolio/pharmacy-practice-app/index.qmd), I restricted all direct AI/student interaction. Instead, I worked with AI to generate a problem bank from worked templates along with Python to generate the solutions programmatically from problem input numbers. In both cases, I'm not blindly ceding responsibility for learning to the AI, but using AI in a limited way to develop a vetted question bank that I have full control over.
+
+### One chat, one task
+
+When both designing and assigning a task that involves AI, it's useful to get into the habit of switching instances often. As the chat history grows longer and longer, the initial context of the chat has less and less influence on the behavior of the AI. The well-crafted orientation document is useless if the AI forgets about it, and a tightly restricted AI learning experience can readily become a mess if those restrictions get lost in the shuffle. To keep the AI sharp and on-task, it's important to start fresh from a new instance regularly. In the statistics trainer tool, for instance, I have an entire second set of orientation documents for the evaluation stage of the experience. Not only does this ensure that the AI stays on target, it also prevents earlier instances from inadvertantly revealing answers to the student. Every instance has only what it needs for each stage, and switching to a new instance is built into the expectations for the experience.
+
+## Oversight Principles
+
+### Trust, but verify
+
+As AI is implemented more and more freely, as responsibility for learning is shifted from the instructor to the student, the temptation to use AI in unintended ways grows and grows. While you can prime the AI to redirect the student or set boundaries in the orientation document, this is not foolproof, and a determined student can find ways around any boundaries you care to set. One way this behavior can be mitigated, though, is through oversight of the student's interactions with the AI. For example, we might require the chat logs for a given AI assignment to be turned in alongside the assignment. 
+
+### Avoid rogue AI
+
+Whenever possible, the AI should not be an independent source of truth. It's all too easy for an AI to get fixated on the wrong thing, miss important context, or [just make stuff up](https://www.cbsnews.com/news/aircanada-chatbot-discount-customer/). Obviously, we want to avoid that in our learning experiences. There's not a foolproof way to do this, but we can stack the deck on our favor by providing a source of truth and instructing the AI to use only this source. We might include excerpts from textbooks or lecture notes in our uploaded material for an assignment, or we might pre-generate a question and solution bank and have the AI refer to that. 
+
+### Fully test on a new instance
+
+Lastly, we want to make sure anything we're releasing to students has been thoroughly tested, and the principles for this testing are very similar to the principles we would use for proofreading, editing, or testing in other contexts as well. It's always useful to get another set of eyes to catch things you might miss, and this holds true for AI. As an instance of AI continues to do things, it's adding more and more text to its local context. Much like a human, it will solve problems, gain new insight, and create assumptions that another instance of AI will not have. Even giving another instance the full text of that entire history will not recreate the internal model of the previous instance. Then, it is critical that you use fresh instances to rigorously test your learning experience, tweak your orientation documents, and ensure that the student's experience matches your plan. 
+
+This idea holds for using an AI to sanity check work. For example, if you want AI to do a pass of a question bank to identify potential errors, it's much better to use a separate instance from the creation instance. You might even consider using an entirely different model to do this testing. 

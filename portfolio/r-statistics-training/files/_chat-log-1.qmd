@@ -1,0 +1,1067 @@
+::: {.callout-note title="User · turn 0"}
+Alright, I'm wanting to do my analysis and write my report in RStudio as an R markdown file. I've used RStudio before and created similar reports, but it's been a while, so I've forgotten a lot of the details on how to get everything set up.
+
+Looking at the experiment description, it seems like our main dependent variable is going to be this QoR-15 score. This is continuous data, so we're not really looking at contingency tables or logistic regression methods. Our main independent variable is going to be the surgical approach, which is categorical. We could simply do a t-test, but this would miss out on the other variables we have data for, so I think we'd be best served with an ANCOVA approach so we can adjust for things like age, BMI, and the like.
+
+Okay, if that's the direction I'd like to go, what do I need to do to get started? Any packages I need to include for this?
+:::
+
+::: {.callout-tip title="Claude · turn 1"}
+Here's how to get set up in RStudio.
+
+#### 1. Create the R Markdown file
+
+- **File → New File → R Markdown…**, give it a title, choose HTML (or PDF/Word) output, and click OK.
+- Save the `.Rmd` in the same folder as `colectomy-data.csv`. R Markdown knits relative to the file's own folder, so `read.csv("colectomy-data.csv")` will work without a full path.
+- Delete the template content below the YAML header (the block between the `---` lines).
+
+#### 2. Packages that are useful for an ANCOVA workflow
+
+None of these are strictly required, since base R can fit the model with `lm()`. They make the work easier, though:
+
+| Package | What it's for |
+|---|---|
+| `tidyverse` | Reading data (`read_csv`), wrangling (`dplyr`), plotting (`ggplot2`) |
+| `car` | `Anova()` for Type II/III sums of squares, `leveneTest()`, `vif()` |
+| `emmeans` | Adjusted (estimated marginal) means and contrasts with CIs |
+| `effectsize` | Effect sizes such as partial $\eta^2$ |
+| `performance` | `check_model()`, a quick panel of assumption-check plots |
+| `knitr` | `kable()` for clean tables in the knitted report |
+
+Install them once from the console, not inside the Rmd:
+
+```r
+install.packages(c("tidyverse", "car", "emmeans", "effectsize", "performance", "knitr"))
+```
+
+#### 3. Setup chunk at the top of your Rmd
+
+````markdown
+```{{r setup, include=FALSE}}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(car)
+library(emmeans)
+library(effectsize)
+library(performance)
+library(knitr)
+```
+````
+
+#### 4. Read the data and set factor types
+
+````markdown
+```{{r load-data}}
+dat <- read_csv("colectomy-data.csv")
+str(dat)
+summary(dat)
+```
+````
+
+`read_csv` will read `approach` and `diabetes` as character columns. You'll want to convert them to factors with `factor()`. If you want a particular group as the reference level, you can set it with the `levels =` argument.
+
+#### 5. Outline your sections
+
+It may help to add headers that mirror the required report sections: Design, Method & Justification, Variable Selection, Assumption Checks, Results, and Interpretation. That way you can fill them in as you go.
+
+Which variables go into the model, and why, is your call to make and justify in the report. Once you've decided and written some code, paste your code or output here and I can help with syntax, errors, or reading the output.
+:::
+
+::: {.callout-note title="User · turn 2"}
+Okay, for packages, I also have dplyr, ggplot2, ggpubr installed. I don't remember exactly what they do, but I think they might be useful here?
+:::
+
+::: {.callout-tip title="Claude · turn 3"}
+They're useful, and two of them you already have through the tidyverse:
+
+- **`dplyr`** is data wrangling: `filter()`, `select()`, `mutate()` (e.g., converting columns to factors), `group_by()` + `summarise()` for group descriptives. It's loaded automatically by `library(tidyverse)`.
+- **`ggplot2`** is the plotting system: boxplots, scatterplots, histograms, Q-Q plots. It's also part of the tidyverse, so it's loaded automatically too.
+- **`ggpubr`** is not part of the tidyverse. It's a wrapper around ggplot2 that makes publication-style plots quickly, with functions like `ggboxplot()`, `ggscatter()`, `ggqqplot()`, `ggdensity()`, and it can add p-values or regression lines to plots. It's handy if you'd rather not build plots layer by layer.
+
+So in your setup chunk, `library(tidyverse)` covers dplyr and ggplot2. Just add:
+
+```r
+library(ggpubr)
+```
+
+A quick example of each style, so you can see the difference:
+
+```r
+ggplot(dat, aes(x = approach, y = qor15_30d)) + geom_boxplot()
+
+ggboxplot(dat, x = "approach", y = "qor15_30d")
+```
+
+Both give the same kind of plot, so use whichever feels more comfortable.
+:::
+
+::: {.callout-note title="User · turn 4"}
+Okay, I'm trying to remember what the process is for viewing the document as we go. Is it this knitting option? Or do I need to do something else?
+:::
+
+::: {.callout-tip title="Claude · turn 5"}
+Yes, **Knit** is how you see the full rendered document, but there are a couple of ways to view things as you go.
+
+**1. Run chunks interactively (fastest while working)**
+
+- Click the green ▶ arrow at the top-right of a chunk, or press **Ctrl+Shift+Enter** (Cmd+Shift+Enter on Mac), to run that chunk.
+- **Ctrl+Enter** runs just the current line or selection.
+- Output appears right under the chunk in the editor. If you'd rather see it in the Console and Plots pane, click the gear ⚙ next to Knit and choose **"Chunk Output in Console."**
+- Objects you create this way show up in the **Environment** pane, so later chunks can use them.
+
+**2. Knit (the full rendered report)**
+
+- Click **Knit** at the top of the editor, or press **Ctrl+Shift+K**.
+- This runs the whole document from scratch in a clean session and produces the HTML, PDF, or Word file, which opens in a viewer window or the Viewer pane.
+- To have it show in the Viewer pane instead of a popup, go to the gear ⚙ → **"Preview in Viewer Pane."**
+
+**One gotcha:** knitting does *not* use your Environment. If something works when you run chunks interactively but fails on knit, it's usually because a package is loaded, or a variable is created, somewhere other than in the Rmd itself, or the chunks are out of order. Everything the report needs has to be in the file, top to bottom.
+
+A good rhythm is to run chunks interactively while you're building and knit every so often to make sure the whole thing still renders cleanly.
+:::
+
+::: {.callout-note title="User · turn 6"}
+````markdown
+---
+title: "Colectomy Data Report"
+output: html_document
+date: "2026-11-12"
+---
+
+```{{r setup, include=FALSE}}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
+library(ggpubr)
+library(emmeans)
+library(effectsize)
+library(performance)
+library(knitr)
+```
+
+```{{r load-data}}
+dat <- read_csv("colectomy-data.csv")
+str(dat)
+summary(dat)
+```
+
+## Experimental Design
+
+## Analysis of Data
+
+## Assumption for ANCOVA
+
+## Fitting the Model
+
+## Interpretation of the Model
+````
+
+Alright, here's the file as is. We see the data summaries and then the section headers for later. I didn't convert the approach and diabetes columns to factor, so I need to do that
+:::
+
+::: {.callout-tip title="Claude · turn 7"}
+Good start. Here's how to convert those two columns. You can put this right after `read_csv()` in your `load-data` chunk, or in its own chunk:
+
+```r
+dat <- dat %>%
+  mutate(
+    approach = factor(approach),
+    diabetes = factor(diabetes)
+  )
+
+str(dat)  # confirm they now show as Factor
+```
+
+By default, `factor()` orders levels alphabetically, so `Laparoscopic` will be the reference level for `approach` and `No` for `diabetes`. If you want a different reference group, set the order explicitly. The first level listed becomes the reference:
+
+```r
+approach = factor(approach, levels = c("Open", "Laparoscopic"))
+```
+
+The reference level matters mainly for how you read the coefficients later. The approach coefficient will be "the other group minus the reference group," so pick whichever direction you find most natural to interpret.
+
+You can check the levels with:
+
+```r
+levels(dat$approach)
+table(dat$approach)
+```
+
+One small tip: if you run `str(dat)` and `summary(dat)` *after* the conversion, the summary will show counts per level for the factors instead of just "character," which is more informative for your report.
+:::
+
+::: {.callout-note title="User · turn 8"}
+Alright, that's done, and now I can see better summaries for those columns. I see that we have 100 subjects each for the two different approaches, which is good. There's no funkiness with group sizes. Diabetes does have a size difference between yes and no, but that should still be okay with randomization.
+
+Hmmm. Okay, now we need to start picking things apart. Our main factor is the approach, and our main outcome of interest is qor15. Age, BMI, and diabetes status are all measured prior to surgery. I'm not sure if any of those are correlated to how the approach is selected. Actually, the design description says it was randomized, so we expect no correlation there. Length of stay, however, is post-surgery and seems like it would generally correlate with quality of recovery. Longer stays seem like they would indicate more difficult recoveries, so we might want to exclude length of stay from our analysis?
+:::
+
+::: {.callout-tip title="Claude · turn 9"}
+Those are your calls to make and justify, and it sounds like you're thinking through the right questions: *when* each variable was measured relative to randomization, and how it might relate to treatment and outcome. Whatever you decide, write that reasoning into your Variable Selection section, since the timing argument is the kind of justification the report asks for.
+
+I can't tell you which variables to keep or drop, but here are tools to check the things you're wondering about.
+
+**Pre-surgery covariates by group**, to see what randomization gave you in this sample:
+
+```r
+dat %>%
+  group_by(approach) %>%
+  summarise(
+    n = n(),
+    age_mean = mean(age), age_sd = sd(age),
+    bmi_mean = mean(bmi), bmi_sd = sd(bmi),
+    pct_diabetes = mean(diabetes == "Yes") * 100
+  )
+```
+
+**How variables relate to each other and to the outcome:**
+
+```r
+dat %>%
+  select(age, bmi, length_of_stay, qor15_30d) %>%
+  cor()
+
+pairs(dat[, c("age", "bmi", "length_of_stay", "qor15_30d")])
+
+ggboxplot(dat, x = "approach", y = "length_of_stay")
+```
+
+**Categorical vs. categorical:**
+
+```r
+table(dat$approach, dat$diabetes)
+```
+
+These will show you associations in the data. Remember that an association alone doesn't settle whether a variable *belongs* in the model; that comes back to the design reasoning you're already doing. Run these and paste the output if you want help reading any of it.
+:::
+
+::: {.callout-note title="User · turn 10"}
+Hmmm. Can I paste those snippets into the console? Or do I need to run it as part of the report itself? I'd kinda like to keep the exploratory stuff out of the report until I'm more sure how I want to include it and write about it
+:::
+
+::: {.callout-tip title="Claude · turn 11"}
+Yes, you can paste them straight into the console. Because you've already run your `setup` and `load-data` chunks interactively, `dat` (with the factor conversions) and your packages are in the Environment, so the console can see them.
+
+A few other options, depending on how you like to work:
+
+- **A scratch R script:** File → New File → R Script. Paste the exploratory code there and run lines with **Ctrl+Enter**. It's easier to edit and rerun than the console, and you can save it as something like `explore.R` without it touching the report.
+- **A chunk that runs but doesn't print:** if you want it in the Rmd for later, add `include=FALSE` to the chunk header. It runs on knit but nothing appears in the output. Or use `eval=FALSE` to keep the code in the file without running it at all.
+
+  ````markdown
+  ```{{r explore, include=FALSE}}
+  # exploratory code here
+  ```
+  ````
+
+The only catch with the console or a scratch script is that if you restart R or open a fresh session, you'll need to rerun the `setup` and `load-data` chunks first so `dat` exists again.
+:::
+
+::: {.callout-note title="User · turn 12"}
+```
+> dat %>%
++     group_by(approach) %>%
++     summarise(
++         n = n(),
++         age_mean = mean(age), age_sd = sd(age),
++         bmi_mean = mean(bmi), bmi_sd = sd(bmi),
++         pct_diabetes = mean(diabetes == "Yes") * 100
++     )
+
+Error in dat %>% group_by(approach) %>% summarise(n = n(), age_mean = mean(age),  :
+  could not find function "%>%"
+```
+
+I get an error with a copy paste here
+:::
+
+::: {.callout-tip title="Claude · turn 13"}
+That error means the tidyverse isn't loaded in your current session. `%>%` (the pipe) comes from the tidyverse, via the magrittr package, so R doesn't recognize it until the library is loaded.
+
+To fix it, run your **setup chunk** (click its green ▶ arrow), or just run this in the console:
+
+```r
+library(tidyverse)
+```
+
+Then paste the snippet again. If `dat` also turns out to be missing (an "object 'dat' not found" error), run your `load-data` chunk too.
+
+This usually happens after a restart or when opening the project fresh. Your Environment pane is a good quick check: if `dat` isn't listed there, the chunks haven't been run in this session.
+
+Alternatively, R 4.1 and later has a built-in pipe, `|>`, that works without loading any packages. But you'll still need the tidyverse loaded for `group_by()` and `summarise()`, so loading it is the real fix.
+:::
+
+::: {.callout-note title="User · turn 14"}
+Oh, it doesn't automatically find dat either
+:::
+
+::: {.callout-tip title="Claude · turn 15"}
+Right. Same cause: the console session is fresh, so nothing from your Rmd exists there yet. Run your chunks in order:
+
+1. The **setup** chunk (loads the packages)
+2. The **load-data** chunk (creates `dat` and converts the factors)
+
+A shortcut: put your cursor in the `load-data` chunk and press **Ctrl+Alt+P** (Cmd+Option+P on Mac). That runs all chunks *above* the current one. You can also use the **Run** dropdown at the top of the editor → **"Run All Chunks Above."** Then run `load-data` itself.
+
+After that, `dat` should appear in the Environment pane, and your exploratory snippets will work in the console.
+
+If `read_csv()` gives a "file not found" error when you run it interactively, check the console's working directory with `getwd()`. Knitting uses the Rmd's own folder, but the console might be somewhere else. You can fix that with **Session → Set Working Directory → To Source File Location**.
+:::
+
+::: {.callout-note title="User · turn 16"}
+Ohhhh, Okay, I think I have it now.
+
+```
+  approach         n age_mean age_sd bmi_mean bmi_sd pct_diabetes
+  <fct>        <int>    <dbl>  <dbl>    <dbl>  <dbl>        <dbl>
+1 Laparoscopic   100     61.7   9.50     29.6   4.45           24
+2 Open           100     64.0   9.66     28.8   5.02           20
+```
+
+Seems like things have been divided up fairly evenly.
+
+```
+                        age          bmi length_of_stay  qor15_30d
+age             1.000000000  0.001317418     0.11832338 -0.3193283
+bmi             0.001317418  1.000000000    -0.05794214 -0.1225380
+length_of_stay  0.118323378 -0.057942139     1.00000000 -0.5670716
+qor15_30d      -0.319328294 -0.122538005    -0.56707157  1.0000000
+```
+
+LoS seems like it has a fairly strong correlation with QoR? Which is as we expect, they're kinda measuring the same thing.
+
+pasted the scatterplots (I really love that I can just copy paste images right into here from RStudio. How handy!) We do definitely see some correlation in the LoS and QoR scatterplots.
+
+::: {.callout-warning appearance="minimal" title="Image placeholder"}
+Scatterplot matrix (`pairs()`) of age, BMI, length of stay and QoR-15.
+:::
+
+I did different boxplots for length of stay that you suggested and also with QoR. Again, feels like we're getting the same effects. Open surgery appears to lead to longer stays and worse QoR scores.
+
+::: {.callout-warning appearance="minimal" title="Image placeholder"}
+Boxplots of length of stay by approach, and QoR-15 by approach.
+:::
+
+So, since LoS and QoR are kinda measuring the same thing, we should exclude LoS. From the boxplots, we can kinda see what would happen if we didn't. We'd try to adjust for LoS, but that would end up hiding some of the effect on QoR as well. The justification for this, though, is just the measuring the same thing aspect, though.
+:::
+
+::: {.callout-tip title="Claude · turn 17"}
+Glad it's working, and yes, pasting plots straight in is handy.
+
+Your reading of the output is accurate:
+
+- **Group summaries:** the means, SDs, and diabetes percentages are similar across the two arms, with small differences (about 2 years in mean age, under 1 unit of BMI, 4 percentage points in diabetes).
+- **Correlation matrix:** length of stay has the largest correlation with QoR-15 ($r \approx -0.57$), followed by age ($r \approx -0.32$), with BMI weaker ($r \approx -0.12$). The covariates are only weakly correlated with each other.
+- **Boxplots:** the Open group has a higher median length of stay and a lower median QoR-15 than the Laparoscopic group.
+
+Whether to include or exclude length of stay, and why, is your decision, so I'll leave the reasoning to you. You've noticed that your justification feels thinner than your conclusion. That's worth sitting with before you write that section, since the report asks for a justification for each variable, and you'll want one you're confident defending. Your design description and variable table are good places to anchor it.
+
+When you're ready to write it up, these outputs belong in the report. The group summary table fits your design or variable-selection section; `kable()` will make it look clean:
+
+```r
+dat %>%
+  group_by(approach) %>%
+  summarise(...) %>%   # your same summarise() call
+  kable(digits = 1)
+```
+
+The same pattern works for the correlation matrix: `kable(cor(...), digits = 2)`.
+:::
+
+::: {.callout-note title="User · turn 18"}
+Okay, moving on to assumptions. Let me see if I remember the assumptions we need for ANCOVA. I know we need independent observations. This should be met from the experimental design. We don't really expect one person's recovery to impact another person's surgical recovery.
+
+We need our data to be linear on the covariates. I'll have to check that. We need equal slopes. I'm not sure if I remember how to check that. We do interaction terms for that, yes?
+
+Normality of residuals, we'll have to check that. I'm not sure I remember exactly how to do that either. Equal variance, I think we might have already seen that they're roughly equal in the data table up above, but we'll want to test that and make sure as well. Anything I'm missing?
+:::
+
+::: {.callout-tip title="Claude · turn 19"}
+Your list covers the core assumptions. A few additions and one clarification:
+
+**Your list:**
+
+1. **Independence of observations**, which you argue from the design.
+2. **Linearity** between each continuous covariate and the outcome.
+3. **Homogeneity of regression slopes:** yes, you test this with interaction terms.
+4. **Normality of residuals.**
+5. **Homogeneity of variance**, which concerns the variance of the *outcome residuals* across groups. The table you made shows SDs of age and BMI, which are covariates, so it doesn't speak to this assumption. You'll still want to check it separately.
+
+**Commonly added:**
+
+6. **Covariates independent of the treatment.** Often argued from randomization, and you can point to your balance table.
+7. **Outliers and influential points**, which aren't strictly an assumption but are part of a standard check.
+8. **Multicollinearity among predictors**, if you have several covariates. `vif()` from `car` checks this.
+
+**How to check each one in R.** Replace the right-hand side with whatever model you choose:
+
+```r
+fit <- lm(qor15_30d ~ approach + covariate1 + covariate2, data = dat)
+
+fit_int <- lm(qor15_30d ~ approach * covariate1 + approach * covariate2, data = dat)
+Anova(fit_int, type = 3)        # look at the interaction rows
+anova(fit, fit_int)
+
+ggscatter(dat, x = "covariate1", y = "qor15_30d", color = "approach",
+          add = "reg.line")
+
+res <- residuals(fit)
+ggqqplot(res)
+shapiro.test(res)
+
+leveneTest(res ~ approach, data = dat)
+
+vif(fit)
+
+check_model(fit)
+```
+
+For the slopes check, a non-significant interaction is consistent with equal slopes. For Levene's test and Shapiro-Wilk, a non-significant p-value means no evidence of a violation. With $n = 200$, Shapiro-Wilk can flag trivial departures, so many people lean on the Q-Q plot as the primary evidence.
+:::
+
+::: {.callout-note title="User · turn 20"}
+Actually, going on a tiny bit of a tangent here, but covariates being independent from treatment, how is that actually handled irl? I mean, we can certainly point to our balance table in this case and say that the covariates have been divided up equally, but that feels a little weird. The covariates being independent from the treatment is given by the randomization, but we can still theoretically randomize the treatment and get highly unequal balance. How is that handled? It feels hacky if we were to say "Oh, we looked at the balance table and didn't like the distribution, so we rerandomized". Do you just bite the bullet and say "we had unequal balance, but that's due to random chance in the randomization process, so we continue on regardless"
+:::
+
+::: {.callout-tip title="Claude · turn 21"}
+Your instinct is right on both counts, and this is a well-studied question.
+
+**What randomization actually guarantees**
+
+Randomization makes covariates independent of treatment *in expectation*, over all possible randomizations. Any single realized allocation can be imbalanced by chance. The key point is that this chance imbalance is already accounted for in the inference: p-values and confidence intervals are calibrated over the randomization distribution, which includes the unlucky allocations. So "we had some imbalance by chance, and we proceed" is the textbook-correct stance, not biting a bullet.
+
+**Why significance-testing balance is discouraged**
+
+Many trials used to report p-values comparing baseline characteristics between arms. CONSORT and most methodologists now advise against this. If randomization was done properly, the null hypothesis is *true by construction*, so any "significant" difference is by definition a false positive. A descriptive table (means, SDs, percentages) is the recommended way to report balance. Then you judge whether any difference is large enough to matter *clinically*, not statistically.
+
+**How imbalance is handled in practice**
+
+- **Pre-specified covariate adjustment.** This is the main tool, and it's what ANCOVA does. Adjusting for prognostic baseline covariates corrects for chance imbalance in them and usually tightens the confidence interval. The important part is choosing covariates *in advance*, based on prior knowledge of what predicts the outcome, not after looking at which ones came out imbalanced. Choosing adjustment variables based on observed imbalance opens the door to analytic flexibility.
+- **Design-stage fixes**, done before allocation:
+  - **Stratified (blocked) randomization:** randomize separately within strata, e.g., diabetic and non-diabetic patients, so those groups are balanced by design.
+  - **Minimization:** each new patient is allocated, partly at random, to whichever arm best preserves balance across several factors. It's common in smaller trials.
+  - **Rerandomization:** your "hacky" idea is actually a legitimate method (Morgan & Rubin, 2012), *if* the acceptance rule is specified in advance (e.g., "redraw until the Mahalanobis distance between arms is below threshold $a$"), and the analysis accounts for the restricted set of allowable allocations. What's hacky is doing it ad hoc and then analyzing as if it were simple randomization.
+
+**Summary:** randomize once (or with a pre-specified restriction), report balance descriptively, adjust for pre-specified prognostic covariates, and don't let the observed balance drive the analysis choices.
+:::
+
+::: {.callout-note title="User · turn 22"}
+Oh, how do I do a numbered list in RMarkdown?
+:::
+
+::: {.callout-tip title="Claude · turn 23"}
+Same as regular Markdown: start each line with a number and a period, with a blank line before the list.
+
+```markdown
+Some text before the list.
+
+1. First item
+2. Second item
+3. Third item
+```
+
+A few details:
+
+- **The numbers don't have to be correct.** Markdown renumbers automatically, so `1.` `1.` `1.` still renders as 1, 2, 3. That makes reordering easy.
+- **Blank line before the list:** if the list comes right after a paragraph with no blank line, it may render as plain text instead of a list. This is the most common gotcha.
+- **Nested items:** indent by 4 spaces (or a tab).
+
+  ```markdown
+  1. Independence
+  2. Linearity
+      - checked with scatterplots
+      - by group
+  3. Equal slopes
+  ```
+
+- **Bullets** work the same way with `-` or `*` instead of numbers.
+:::
+
+::: {.callout-note title="User · turn 24"}
+Okay, what do I need to do to insert the code into the markdown file and have it's output shown? for the balance table
+:::
+
+::: {.callout-tip title="Claude · turn 25"}
+You put code in a **code chunk**. Anything inside a chunk runs when you knit, and its output (tables, plots, printed results) appears right below it in the report.
+
+**To insert a chunk:**
+
+- Press **Ctrl+Alt+I** (Cmd+Option+I on Mac), or
+- Click the green **+C** button at the top of the editor → **R**, or
+- Type it by hand: three backticks plus `{r}`, your code, then three backticks to close.
+
+**Your balance table as a chunk:**
+
+````markdown
+```{{r balance-table}}
+dat %>%
+  group_by(approach) %>%
+  summarise(
+    n = n(),
+    age_mean = mean(age), age_sd = sd(age),
+    bmi_mean = mean(bmi), bmi_sd = sd(bmi),
+    pct_diabetes = mean(diabetes == "Yes") * 100
+  ) %>%
+  kable(digits = 1, caption = "Baseline characteristics by surgical approach")
+```
+````
+
+Put it under whichever section header you want it in, with your prose above or below it as normal text outside the chunk.
+
+**Controlling what shows up, set in the chunk header:**
+
+| Option | Effect |
+|---|---|
+| *(none)* | Code **and** output shown, the default from your setup chunk |
+| `echo=FALSE` | Output only, code hidden |
+| `include=FALSE` | Runs but shows nothing |
+| `eval=FALSE` | Code shown but not run |
+
+For example, `{r balance-table, echo=FALSE}` gives you just the table. That's nice in a report, but whether your instructor wants the code visible is worth checking.
+
+The chunk label (`balance-table`) is optional, but each label must be unique within the document, or knitting will fail.
+:::
+
+::: {.callout-note title="User · turn 26"}
+::: {.callout-warning appearance="minimal" title="Image placeholder"}
+Linearity scatterplots: QoR-15 against age, against BMI, and by diabetes status, coloured by approach.
+:::
+
+I'm not really sure how to interpret this for linearity. I mean, it's not super highly linear, but it's also not obviously nonlinear. It's just kinda a big mess? Are big messes linear?
+:::
+
+::: {.callout-tip title="Claude · turn 27"}
+Big messes can be linear. Linearity is about the **shape** of the average relationship, not how tightly the points cluster around it.
+
+- **Scatter (noise)** is about the *strength* of the relationship. A lot of spread just means the covariate explains a modest share of the variation, which is fine for ANCOVA.
+- **Linearity** asks whether the *trend* through the cloud is a straight line or something curved, like a U-shape, a plateau, or a bend. A violation looks like points systematically above the line at both ends and below it in the middle, or similar.
+
+So the question to ask of a plot is: *is there any curvature in the middle of the cloud that a straight line misses?* not *are the points close to the line?*
+
+**Two things that make this easier to judge**
+
+1. **Add a smoother.** A loess curve follows the data without forcing a straight line. If it roughly tracks the straight line, linearity is reasonable; if it bends clearly, that's a concern.
+
+   ```r
+   ggplot(dat, aes(x = age, y = qor15_30d, color = approach)) +
+     geom_point(alpha = 0.6) +
+     geom_smooth(method = "lm", se = FALSE) +
+     geom_smooth(method = "loess", se = FALSE, linetype = "dashed")
+   ```
+
+2. **Check the residuals from the fitted model**, which is often clearer than raw scatterplots:
+
+   ```r
+   crPlots(fit)                  # component + residual plots (car), one per covariate
+   plot(fit, which = 1)          # residuals vs fitted; look for a curve in the red line
+   ```
+
+   In `crPlots`, the dashed line is the linear fit and the solid line is a smoother. Ideally they roughly overlap.
+
+**About diabetes:** linearity only applies to *continuous* covariates. Diabetes is a two-level factor, so the model just estimates a shift between No and Yes, and there's no "shape" to check. That third plot is better read as a look at how the outcome distributions differ by diabetes status and approach. For a categorical covariate, the relevant check is the interaction (equal-slopes) test, `approach * diabetes`.
+:::
+
+::: {.callout-note title="User · turn 28"}
+::: {.callout-warning appearance="minimal" title="Image placeholder"}
+Age and BMI scatterplots with linear fits and dashed loess curves, by approach.
+:::
+
+Okay, I think these might be reasonably linear? I don't like the swoop of the red line on the left hand side of the first image, but I think that might just be overthinking a relatively messy spread on the data?
+:::
+
+::: {.callout-tip title="Claude · turn 29"}
+That's a reasonable thing to wonder about, and there's a known reason loess curves misbehave at the edges.
+
+**Why the ends of a loess curve are unreliable**
+
+- **Few points:** at the extremes of the x-axis there's little data, so the smoother is fitting just a handful of points. A few high or low observations can pull it sharply.
+- **One-sided neighborhoods:** in the middle, loess averages points on both sides of each x value. At the edges it only has points on one side, which makes it more prone to swooping.
+
+The red curve's swoop on the left is driven by roughly the youngest 4 or 5 Laparoscopic patients. Wiggles in sparse regions are usually given much less weight than a consistent bend through the bulk of the data.
+
+**Two ways to make the judgment less eyeball-dependent**
+
+1. **Show the uncertainty band.** If the straight line sits inside the loess band, the curve isn't distinguishable from linear:
+
+   ```r
+   ggplot(dat, aes(x = age, y = qor15_30d, color = approach)) +
+     geom_point(alpha = 0.6) +
+     geom_smooth(method = "lm", se = FALSE) +
+     geom_smooth(method = "loess", se = TRUE, linetype = "dashed")
+   ```
+
+2. **A formal check:** add a squared term and see if it contributes anything. For a centered quadratic in age:
+
+   ```r
+   fit_quad <- lm(qor15_30d ~ approach + age + I((age - mean(age))^2) + ..., data = dat)
+   anova(fit, fit_quad)
+   ```
+
+   Replace `...` with the rest of your chosen model. A non-significant result means no evidence that curvature improves the fit.
+
+Whether you conclude linearity is adequate is your call. Either way, in the report you can describe what you saw ("the loess curve deviates at low ages, where few observations are present") and what you did about it. Showing that you noticed and checked is the kind of thing that makes an assumptions section convincing.
+:::
+
+::: {.callout-note title="User · turn 30"}
+For the fit, do I need to add diabetes? qor15_30d ~ approach + age + bmi + diabetes? Or is that only for continuous covariates?
+:::
+
+::: {.callout-tip title="Claude · turn 31"}
+You *can* include it. `lm()` handles factor covariates fine, and an ANCOVA model can mix continuous and categorical covariates. Whether diabetes *should* be in the model is your variable-selection decision. The linearity rule doesn't settle it either way, since linearity only concerns how continuous covariates enter the model, not which covariates you include.
+
+Mechanically, here's what happens if you include it:
+
+```r
+fit <- lm(qor15_30d ~ approach + age + bmi + diabetes, data = dat)
+```
+
+R automatically creates an indicator for the non-reference level, so the coefficient `diabetesYes` is the adjusted difference in mean QoR-15 for patients with diabetes vs. without, holding the other terms constant.
+
+For the quadratic linearity check, you'd add the squared term only for the **continuous** covariate you're testing. Diabetes stays in as-is:
+
+```r
+fit_quad <- lm(qor15_30d ~ approach + age + I((age - mean(age))^2) + bmi + diabetes,
+               data = dat)
+anova(fit, fit_quad)
+```
+
+You can't square a two-level factor, and there's no curvature to test. The same applies to the other assumption checks: diabetes goes into the equal-slopes test (`approach * diabetes`), but not into linearity.
+
+The important thing is that `fit` and `fit_quad` contain the same terms apart from the squared one, so that `anova()` is comparing like with like.
+:::
+
+::: {.callout-note title="User · turn 32"}
+Okay, yeah. I do want to include diabetes, I just couldn't remember the details of the lm model. Right now, I'm only focused on the ancova fit. I don't see enough reason in the scatterplots to feel the need to investigate nonlinearity further.
+:::
+
+::: {.callout-tip title="Claude · turn 33"}
+That works. Recording what you looked at and why you're satisfied is a perfectly good basis for the assumptions section.
+
+Here's the toolkit for the ANCOVA fit itself, using your model:
+
+```r
+fit <- lm(qor15_30d ~ approach + age + bmi + diabetes, data = dat)
+```
+
+**ANCOVA table:**
+
+```r
+Anova(fit, type = 2)
+```
+
+Type II tests each term adjusted for the others (without interactions), which is the usual choice for an additive ANCOVA. If you include interaction terms elsewhere, such as in your equal-slopes check, Type III is what's typically used for that model.
+
+**Coefficients with confidence intervals:**
+
+```r
+summary(fit)
+confint(fit)
+```
+
+The `approachOpen` row (or `approachLaparoscopic`, depending on your reference level) is the adjusted mean difference between approaches.
+
+**Adjusted means per group, and their difference with a CI:**
+
+```r
+emm <- emmeans(fit, ~ approach)
+emm                        # adjusted mean for each approach
+pairs(emm)                 # difference between approaches
+confint(pairs(emm))        # with a 95% CI
+```
+
+**Effect size:**
+
+```r
+eta_squared(fit, partial = TRUE)
+```
+
+Then you can run the assumption checks on this same `fit`: equal slopes, `check_model()`, `ggqqplot(residuals(fit))`, `leveneTest(residuals(fit) ~ approach, data = dat)`, and `vif()`.
+
+When you have output, paste it here if you want help reading any of it.
+:::
+
+::: {.callout-note title="User · turn 34"}
+```
+Anova Table (Type III tests)
+
+Response: qor15_30d
+                   Sum Sq  Df  F value    Pr(>F)
+(Intercept)       26665.9   1 183.9194 < 2.2e-16 ***
+approach            171.2   1   1.1811 0.2785037
+age                1654.2   1  11.4092 0.0008848 ***
+bmi                 464.9   1   3.2062 0.0749351 .
+diabetes            961.1   1   6.6291 0.0107854 *
+approach:age         12.7   1   0.0875 0.7677488
+approach:bmi         65.6   1   0.4526 0.5019198
+approach:diabetes    18.4   1   0.1272 0.7217516
+Residuals         27837.4 192
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Analysis of Variance Table
+
+Model 1: qor15_30d ~ approach + age + bmi
+Model 2: qor15_30d ~ approach * age + approach * bmi + approach * diabetes
+  Res.Df   RSS Df Sum of Sq      F   Pr(>F)
+1    196 30084
+2    192 27837  4    2246.2 3.8731 0.004752 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+	Shapiro-Wilk normality test
+
+data:  res
+W = 0.99455, p-value = 0.6834
+
+Levene's Test for Homogeneity of Variance (center = median)
+       Df F value  Pr(>F)
+group   1  4.4228 0.03672 *
+      198
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+approach      age      bmi
+1.020890 1.014430 1.006488
+```
+
+Alright, time to roll up my sleeves. For the interaction terms, we're miles above 0.05 for each of them, so we interpret that as no evidence for unequal slopes. For normality, we're way above 0.05 there as well, so we have no problems there. Homogeneity of variance though is a little fiddly. Our null there is that the variances are equal. However, we have evidence to reject the null, since our p-value is less than 0.05. That might be a complication in the data  set. Do I remember what to do about unequal variance? Is there an option to weight the groups to account for that?
+:::
+
+::: {.callout-tip title="Claude · turn 35"}
+Your readings of the interaction rows and the Shapiro-Wilk test are right. Before going further, though, there's a **code issue** to fix, because it affects several of these results.
+
+#### Your `fit` doesn't include diabetes
+
+Look at Model 1 in the comparison:
+
+```
+Model 1: qor15_30d ~ approach + age + bmi
+```
+
+The `vif()` output also lists only `approach`, `age`, `bmi`. So the `fit` object currently in your session was fitted without `diabetes`, probably from an earlier run before you added it. That has two consequences:
+
+1. **The `anova(fit, fit_int)` comparison is invalid as an equal-slopes test.** It's testing 4 extra terms at once (the `diabetes` main effect *plus* the three interactions), so the significant $p = 0.0048$ can't be read as evidence of unequal slopes. For a clean comparison, the two models should differ *only* in the interaction terms.
+2. **The Shapiro-Wilk, Levene, and VIF results came from the model without diabetes.** `res` was computed from that `fit`.
+
+The fix is to refit and rerun everything downstream:
+
+```r
+fit <- lm(qor15_30d ~ approach + age + bmi + diabetes, data = dat)
+fit_int <- lm(qor15_30d ~ approach * age + approach * bmi + approach * diabetes, data = dat)
+
+anova(fit, fit_int)            # now a 3-df test of just the interactions
+res <- residuals(fit)
+shapiro.test(res)
+leveneTest(res ~ approach, data = dat)
+vif(fit)
+```
+
+The Type III table with the interaction rows is fine as it is, since that came from `fit_int`, which already includes diabetes. The re-run results may change, including Levene's.
+
+#### If unequal variance holds up after refitting
+
+You're right that weighting is an option. The common approaches are:
+
+**1. Heteroskedasticity-consistent (robust) standard errors.** Keep the same coefficients but compute standard errors that don't assume equal variance. `car` can do this with what you already have loaded:
+
+```r
+Anova(fit, type = 2, white.adjust = "hc3")
+
+emm_rob <- emmeans(fit, ~ approach, vcov. = hccm(fit, type = "hc3"))
+confint(pairs(emm_rob))
+```
+
+**2. Weighted least squares / group-specific variances.** Model a separate residual variance for each approach using `gls()` from `nlme`, which ships with R:
+
+```r
+library(nlme)
+fit_gls <- gls(qor15_30d ~ approach + age + bmi + diabetes,
+               weights = varIdent(form = ~ 1 | approach),
+               data = dat)
+summary(fit_gls)
+intervals(fit_gls)
+anova(fit, fit_gls)  # won't work directly, since lm vs gls; refit the lm version with gls() to compare
+```
+
+`emmeans()` also works on `gls` objects.
+
+**Some context for choosing.** OLS is fairly robust to unequal variances when the group sizes are **equal**, as yours are (100/100). The danger is greatest when the smaller group has the larger variance. Many people still report robust SEs as a sensitivity check. It can also help to look at the size of the difference, not just the p-value:
+
+```r
+dat %>% mutate(res = res) %>% group_by(approach) %>% summarise(sd_res = sd(res))
+```
+
+A ratio of residual SDs near 1 versus near 2 tells you more than whether $p < 0.05$, especially with $n = 200$, where small differences can reach significance.
+
+Which approach to use, if any, is your call. Whatever you choose, state it and the reason in the assumptions section.
+:::
+
+::: {.callout-note title="User · turn 36"}
+```
+Anova Table (Type III tests)
+
+Response: qor15_30d
+                   Sum Sq  Df  F value    Pr(>F)
+(Intercept)       26665.9   1 183.9194 < 2.2e-16 ***
+approach            171.2   1   1.1811 0.2785037
+age                1654.2   1  11.4092 0.0008848 ***
+bmi                 464.9   1   3.2062 0.0749351 .
+diabetes            961.1   1   6.6291 0.0107854 *
+approach:age         12.7   1   0.0875 0.7677488
+approach:bmi         65.6   1   0.4526 0.5019198
+approach:diabetes    18.4   1   0.1272 0.7217516
+Residuals         27837.4 192
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Analysis of Variance Table
+
+Model 1: qor15_30d ~ approach + age + bmi + diabetes
+Model 2: qor15_30d ~ approach * age + approach * bmi + approach * diabetes
+  Res.Df   RSS Df Sum of Sq      F Pr(>F)
+1    195 27931
+2    192 27837  3     93.11 0.2141 0.8866
+
+	Shapiro-Wilk normality test
+
+data:  res
+W = 0.99684, p-value = 0.9582
+
+Levene's Test for Homogeneity of Variance (center = median)
+       Df F value  Pr(>F)
+group   1  6.0145 0.01505 *
+      198
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+approach      age      bmi diabetes
+1.022815 1.014476 1.011044 1.006929
+```
+
+Okay, reran with diabetes included. Thanks for the catch. We do see that this makes the variances more detectably unequal, so no easy fix there. We might continue with OLS with the equal group sizes as the justification. I'm not sure if the increased significance of the Levene's test should push us away from that option, but I think we can tentatively forge ahead for now
+:::
+
+::: {.callout-tip title="Claude · turn 37"}
+The corrected outputs read cleanly now:
+
+- **Equal slopes:** the 3-df comparison gives $F = 0.21$, $p = 0.89$, which agrees with the individual interaction rows. Now that the models differ only by the interactions, that's a valid test.
+- **Normality:** Shapiro-Wilk $p = 0.96$.
+- **Multicollinearity:** all VIFs are about 1.0, which is essentially no collinearity. You can note that alongside your other checks.
+- **Variance:** Levene's $p = 0.015$.
+
+On whether the smaller Levene's p-value should change your mind: a p-value tells you how confident you can be that *some* difference exists, not how large it is. With 100 per group, a modest variance difference can reach significance. That's why it's worth getting the effect-size version before deciding how much weight to give this:
+
+```r
+dat %>%
+  mutate(res = residuals(fit)) %>%
+  group_by(approach) %>%
+  summarise(sd_res = sd(res), var_res = var(res))
+```
+
+That gives you a concrete ratio to cite in the report, e.g., "the residual SD was X in one group and Y in the other," which makes the "equal group sizes make OLS robust" argument much more convincing than the p-value alone.
+
+If you want extra support for forging ahead with OLS, a common approach is to report the robust-SE version as a **sensitivity analysis**: fit with OLS as your primary analysis, then show that the conclusion about approach doesn't change with HC3 standard errors.
+
+```r
+Anova(fit, type = 2, white.adjust = "hc3")
+confint(pairs(emmeans(fit, ~ approach, vcov. = hccm(fit, type = "hc3"))))
+```
+
+If the two versions agree, that's a strong one-sentence addition to your assumptions section. If they disagree, that's important to know too. Whether to include it is up to you.
+:::
+
+::: {.callout-note title="User · turn 38"}
+```
+  approach     sd_res var_res
+  <fct>         <dbl>   <dbl>
+1 Laparoscopic   13.2    175.
+2 Open           10.4    108.
+```
+
+Hmmmm. I'm not sure about that var_res difference. That feels large?
+:::
+
+::: {.callout-tip title="Claude · turn 39"}
+Variances are on a squared scale, which makes differences look bigger than they are. It helps to put it as a ratio:
+
+$$\frac{s^2_{\text{Lap}}}{s^2_{\text{Open}}} = \frac{175}{108} \approx 1.62, \qquad \frac{s_{\text{Lap}}}{s_{\text{Open}}} = \frac{13.2}{10.4} \approx 1.27$$
+
+So the Laparoscopic group's residual SD is about 27% larger, or its variance about 1.6 times larger.
+
+**Rules of thumb you'll see cited:**
+
+- A largest-to-smallest **variance ratio under about 2** is commonly treated as minor; some sources tolerate up to about 3 or 4 when group sizes are equal.
+- The robustness of OLS to unequal variances depends heavily on group sizes. With **equal $n$**, Type I error stays close to nominal even at fairly large ratios. The real trouble arises when the groups are unbalanced, especially when the *smaller* group has the *larger* variance.
+
+These are heuristics, not hard cutoffs, and different textbooks draw the lines in different places. Whether 1.6 with 100/100 is acceptable is your judgment to state and defend. Citing the ratio and the balanced design together makes for a concrete argument.
+
+If you want something firmer than a rule of thumb, that's what the HC3 sensitivity check is for. It directly shows whether the unequal variance changes your inference about approach in *this* dataset.
+:::
+
+::: {.callout-note title="User · turn 40"}
+::: {.callout-warning appearance="minimal" title="Image placeholder"}
+Q-Q plot of model residuals (`ggqqplot(res)`) with confidence band.
+:::
+
+Oh, for vif, I'm assuming this is the chart that expresses that test? The points fitting the line like this is good?
+:::
+
+::: {.callout-tip title="Claude · turn 41"}
+Not quite. This is a **Q-Q plot**, which checks **normality of residuals**, not multicollinearity. It's the plot from `ggqqplot(res)`. VIF doesn't have a plot; it's just the numbers you already got (all about 1.0).
+
+**Reading the Q-Q plot:**
+
+- Each point is one residual. The x-axis shows where it *would* fall if the residuals were perfectly normal (theoretical quantiles), and the y-axis shows where it actually falls.
+- If the residuals are normal, the points lie along the straight line.
+- The grey band is a confidence envelope. Points within it are consistent with normality.
+
+So yes, points following the line and staying inside the band is what you want to see. Things that would indicate a problem:
+
+| Pattern | Suggests |
+|---|---|
+| Ends curve away in opposite directions (S-shape) | Heavy or light tails |
+| Both ends bend the same way (banana shape) | Skewness |
+| A few isolated points far off at the ends | Outliers |
+
+Here the points track the line closely, with a slight wave in the middle that stays well within the band. That agrees with your Shapiro-Wilk result ($p = 0.96$). This plot plus that test makes a good pairing for the normality part of your assumptions section.
+
+**For VIF in the report:** the usual interpretation is that values near 1 indicate essentially no collinearity, and concern typically starts around 5 or 10. Your values are all about 1.01 to 1.02. A small table works well:
+
+```r
+kable(vif(fit), col.names = "VIF", digits = 2)
+```
+:::
+
+::: {.callout-note title="User · turn 42"}
+```
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+approach      age      bmi diabetes
+1.022815 1.014476 1.011044 1.006929
+```
+
+Oh, this was the vif stuff. I see. It wasn't labeled in the output, so I missed it. I see, no worries.
+:::
+
+::: {.callout-tip title="Claude · turn 43"}
+Right, that last block is the `vif()` output. `vif()` just prints a named vector with no header, so it's easy to miss among other output. (The "Signif. codes" line above it belongs to the Levene's test output.)
+
+To make outputs easier to tell apart when running several checks in a row, you can label them:
+
+```r
+cat("\n--- VIF ---\n")
+vif(fit)
+```
+
+In the knitted report this mostly takes care of itself, since each check will sit under its own heading or chunk with your prose around it.
+:::
+
+::: {.callout-note title="User · turn 44"}
+Alright, for evaluating the ANCOVA, do I just use Anova(fit, type=3) again? Do I need to use a different type?
+:::
+
+::: {.callout-tip title="Claude · turn 45"}
+For your final model, `fit` (no interaction terms), either type works. **Type II and Type III give identical tests for every term when there are no interactions.** The only visible difference is that Type III also prints an `(Intercept)` row, which you can ignore.
+
+```r
+Anova(fit, type = 2)
+```
+
+Type II is the conventional choice for an additive ANCOVA, but if you report Type III, the results will be the same.
+
+**Background on the types:**
+
+| Type | What it tests | When it matters |
+|---|---|---|
+| I (sequential), base `anova()` | Each term adjusted only for terms listed *before* it | Results depend on the order of terms in the formula, so it's usually not what you want for ANCOVA |
+| II | Each term adjusted for all other terms, but not interactions involving it | Standard for models without interactions |
+| III | Each term adjusted for everything, including interactions | Used when interactions are in the model; main effects then also depend on contrast coding |
+
+So the main thing to avoid is base R's lowercase `anova(fit)` for the ANCOVA table, since it's sequential. Lowercase `anova(fit, fit_int)` for *comparing two models*, as you did for equal slopes, is fine.
+
+The ANCOVA table gives you the test for approach. For the report's **effect sizes and confidence intervals**, pair it with:
+
+```r
+confint(pairs(emmeans(fit, ~ approach)))   # adjusted mean difference + 95% CI
+eta_squared(fit, partial = TRUE)           # partial eta-squared
+```
+:::
+
+::: {.callout-note title="User · turn 46"}
+```
+Anova Table (Type II tests)
+
+Response: qor15_30d
+           Sum Sq  Df F value    Pr(>F)
+approach   2141.0   1 14.9474 0.0001505 ***
+age        2999.8   1 20.9432 8.409e-06 ***
+bmi         555.5   1  3.8781 0.0503362 .
+diabetes   2153.1   1 15.0318 0.0001444 ***
+Residuals 27930.6 195
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+ contrast            estimate   SE  df lower.CL upper.CL
+ Laparoscopic - Open     6.62 1.71 195     3.24     9.99
+
+Results are averaged over the levels of: diabetes
+Confidence level used: 0.95
+Parameter | Eta2 (partial) |       95% CI
+-----------------------------------------
+approach  |           0.08 | [0.03, 1.00]
+age       |           0.10 | [0.04, 1.00]
+bmi       |           0.02 | [0.00, 1.00]
+diabetes  |           0.07 | [0.02, 1.00]
+
+- One-sided CIs: upper bound fixed at [1.00].
+```
+
+Okay, what are we looking at here? We see significant p-values for approach, age, and diabetes, and non-significance for bmi (albeit, it's close. Maybe that's something to investigate further with a little more power). In any case, we're comfortable saying that approach, age, and diabetes do have an effect on qor. I also feel like I want to be seeing the various slopes in the anova results, but maybe that's a different type?
+
+For effect sizes, we get an estimated 6.62 difference in qor score between lap and open approaches. Could be as low as 3.24 or as high as 9.99 from the 95% confidence interval. Either way, we're confident there is a difference. The difference seems kinda small out of a 150 point scale. Minor to moderate?
+
+For the partial eta squares, that's the proportion of variance attributable to that variable over the variance in the model not attributable to anything else? Is that how that's phrased?
+:::
+
+::: {.callout-tip title="Claude · turn 47"}
+You're reading most of this correctly. Here's each piece, plus one code issue.
+
+#### The ANCOVA table
+
+Each row tests whether that term explains variation in QoR-15 **after adjusting for the other terms**.
+
+- **Approach:** $F(1, 195) = 14.95$, $p = 0.00015$. This is the row that answers the study question.
+- **Covariates:** age and diabetes are significant; BMI is at $p = 0.050$, just above 0.05.
+
+One distinction worth thinking about as you write: approach was randomized, while age, BMI, and diabetes were observed. The covariate rows are tests of *adjusted associations* with QoR-15, which you may want to phrase differently from the treatment effect. How you phrase it is up to you.
+
+#### Where the slopes are
+
+The Anova table only gives sums of squares and tests, not the estimates. The slopes and differences are in the coefficient table:
+
+```r
+summary(fit)    # estimates, SEs, t-tests
+confint(fit)    # 95% CIs for each coefficient
+```
+
+There you'll see, for example, the change in QoR-15 per year of age, holding other terms constant. The approach coefficient there should match the 6.62 from `emmeans` (possibly with the opposite sign, depending on your reference level).
+
+#### The adjusted difference
+
+Your reading is right: the adjusted mean QoR-15 was **6.62 points higher** for Laparoscopic than Open, with a 95% CI of **3.24 to 9.99**. The CI excludes 0, which matches the significant F-test.
+
+The note "Results are averaged over the levels of: diabetes" means the adjusted means are computed with continuous covariates at their means and averaged across diabetes levels, so it's a covariate-adjusted comparison.
+
+Whether that difference is small or meaningful is an interpretation call for you. One useful anchor: many instruments, including the QoR-15, have a published **minimal clinically important difference (MCID)**. Comparing your estimate and CI against an MCID from the literature is a standard way to judge practical significance, rather than eyeballing it against the 0–150 range.
+
+#### Partial eta-squared: a code fix and a definition
+
+**The fix:** notice the header says "**Type I**". `eta_squared()` on an `lm` object uses sequential sums of squares by default, so those values don't match your Type II table. Pass it the Type II table instead:
+
+```r
+eta_squared(Anova(fit, type = 2), partial = TRUE, alternative = "two.sided")
+```
+
+`alternative = "two.sided"` also gives a regular two-sided CI. The default one-sided CI with the upper bound fixed at 1.00 is why every row showed `1.00`.
+
+**The definition:** your phrasing is close. Precisely,
+
+$$\eta^2_p = \frac{SS_{\text{effect}}}{SS_{\text{effect}} + SS_{\text{residual}}}$$
+
+In words, it's the proportion of variance attributable to that term, out of the variance *not explained by the other terms in the model*. For approach, about 7% of the variance remaining after age, BMI, and diabetes is attributable to approach.
+
+You can verify it by hand from your table: $2141.0 / (2141.0 + 27930.6) \approx 0.071$.
+:::
