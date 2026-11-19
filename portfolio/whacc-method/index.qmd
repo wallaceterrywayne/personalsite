@@ -3,6 +3,7 @@ title: "WHACC Method"
 description: "A structured approach to dimensional analysis"
 date: 2026-11-02
 categories: [Dimensional Analysis, Education, Nursing, Pharmacy, Mathematics]
+image: ../files/A-whacc.png
 # bibliography: references.bib
 # csl: apa-6th-edition.csl
 draft: false
@@ -113,8 +114,39 @@ In the WHACC method, the student is discouraged from using a calculator at any p
 
 ## Design rationale
 
-The align and cancel steps are largely standard dimensional analysis, while the want, have, and calculate steps are additional guidelines to help students break down the problem and avoid juggling separate calculations. Students sometimes get lost partway through a problem and lack a method for reorienting themselves. The Want step ensures that the student correctly identifies the target unit for the problem and displays it prominently if they need to reference it later. Students also sometimes struggle with parsing paragraphs filled with medical jargon, and the Have step encourages them to break the problems down into its relevant numbers and units. Students, especially students more used to the desired over have or proportional reasoning methods, often try to juggle calculations separately and lose track of their numbers and units. Restricting all calculations to the Calculate step attempts to mitigate that by forcing the student to wait and do all the calculations in a single shot. 
+The WHACC method was designed to address common problem I observed when working with students on these sorts of problems. The most common issues encountered were
 
-Furthermore, the Want and Have steps serve as scaffolding that can be faded out over time as the student gains fluency with the method and the material.
+* not knowing when to stop/including irrelevant information,
+* not knowing how to begin, and
+* losing track of calculations.
+
+Beginning each problem by identifying the Want, as well as the constant repetition of "Do I have what I want yet?" after each step in the Align and Cancel cycle, are meant to keep the student focused on the units and give them a clear sign for when they can move on. By beginning the very first Align step with, not an arbitrary choice of starting point but a careful selection of a factor with a desired unit, the student is locked into a solution process that (most of the time) produces the correct answer. 
+
+The Want and the Have steps also give the student a relatively simple task to start with while breaking down the problem from a potentially dense paragraph to a simple list of relevant information. This allows the student to immediately put pen to paper without having to worry about parsing the paragraph itself in one go. By requiring the student to write down all numbers and units in the Have step, they can also save any worrying about relevant vs. irrelevant information for the dimensional analysis step itself, where that sort of determination often falls out naturally by just paying attention to the units. 
+
+The final calculate step also forces the student to avoid juggling calculations throughout the problem. It's very easy to drop or repeat steps by accident when the student is doing the calculations piecemeal, and this is a common source of "silly" mistake. In settings like nursing school, where no partial credit is given, we want to make the process as smooth as possible, with as many guiderails as possible. Saving all the calculations for the end, after the units can all be cancelled out and compared to the desired units, gives a powerful tool for students to catch these sorts of silly errors. Likewise, only having a single calculator use reduces the potential for transcription errors to a minimum. 
+
+I've also found this method to be very useful in reducing cognitive load. For many problems, the solution can be found by a rote application of the WHACC method, and the student never has to make a single active decision. The Want and Have steps reduce the amount of rereading the student has to do from the problem paragraph. Starting with a unit that matches a unit the student Wants gives a clear starting point for dimensional analysis, and the Calculate step minimizes the number of awkward switches between pen and paper (or marker and whiteboard) and calculator, which can be useful for stressed, frustrated, or distracted students during exams. 
 
 ## Reflection
+
+I am very happy with the WHACC method, and I've found it to be very useful in getting students comfortable with dimensional analysis. Dimensional analysis as applied to these sorts of problem often stops being a math problem and becomes more of a jigsaw puzzle, where the student is merely flipping fractions one way or another to line up the units in the appropriate way. Using the WHACC method, I've consistently seen students shift from trying to work out a long and complicated math problem to a straightforward spatial reasoning approach, where their only concern is whether or not they want a particular unit on top of the fraction or on bottom. 
+
+That being said, the WHACC method still occasionally requires some active judgement from students. In particular, problems where there are repeated units among the Haves might require a student to select which repetition is the relevant one. For example, we might consider the problem
+
+> The doctor orders a patient be given 60 mg of Drug C every 4 hours. The package insert for Drug C gives a range of 5-15 mg/kg/day. Drug C is available in a concentration of 10mg/ml, and the patient’s weight is 44 pounds. Is this a safe dosage?
+
+If we follow through on the WHACC method, we inevitably wind up with 
+
+::: {.callout-note icon=false title="WHACC: Align"}
+> The doctor orders a patient be given 60 mg of Drug C every 4 hours. The package insert for Drug C gives a range of 5-15 mg/kg/day. Drug C is available in a concentration of 10mg/ml, and the patient’s weight is 44 pounds. Is this a safe dosage?
+
+**Want:** $\frac{\text{mg}}{\text{dose}}$
+
+**Have:** $\frac{60 \text{ mg}}{\text{dose}}$, $\frac{1 \text{ dose}}{4 \text{ hr}}$, $\frac{5\text{–}15 \text{ mg}}{\text{kg} \cdot \text{day}}$, $\frac{10 \text{ mg}}{\text{mL}}$, $44 \text{ lb}$
+
+**Align:** 
+$$x \ \frac{\text{mg}}{\text{dose}} = \ ?$$
+:::
+
+Here, the student has to choose between $\frac{60 \text{ mg}}{4 \text{ hr}}$, $\frac{5\text{–}15 \text{ mg}}{\text{kg} \cdot \text{day}}$, and $\frac{10 \text{ mg}}{\text{mL}}$, and the WHACC method requires some additional rules to make that clear. (In this case, I normally teach the student to decide between the package label and the order by looking at the language used by the question. Phrases like “will be administered”, “to be infused”, “to be given” refer to what you are *ordered* to do, so you start with the order. "Safe dosage" on the other hand, refers to general guidelines, which you get from the package insert.)

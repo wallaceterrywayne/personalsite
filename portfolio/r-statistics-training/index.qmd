@@ -1,8 +1,9 @@
 ---
 title: "Statistical Analysis Trainer"
 description: "An AI-based statistical analysis training tool"
-date: 2026-11-02
+date: 2026-11-11
 categories: [AI, Education, Instructional Design, Statistics]
+image: ../files/A-stats.png
 # bibliography: references.bib
 # csl: apa-6th-edition.csl
 draft: false
@@ -18,9 +19,7 @@ For students learning a new language, we want a workflow that enables students t
 
 ## Design rationale
 
-### Workflow
-
-For new students learning game design and attempting to create their own games, a common adage is "finish a game as quickly as possible". It's important for a new learner to see all stages of game design to gain a better understanding of game design as a holistic process. When learning a new statistical langauge and learning how to perform a statistical analysis, I believe it is useful use a similar approach, and this trainer is an attempt to build a workflow to get a student producing a minimum viable statistical analysis in their language of choice as quickly as possible, and then checking the quality of that analysis against a vetted reference analysis on a pregenerated data set. 
+For new students learning game design and attempting to create their own games, a common adage is "finish a game as quickly as possible". It's important for a new learner to see all stages of game design to gain a better understanding of game design as a holistic process. When learning a new statistical langauge and learning how to perform a statistical analysis, it is useful to use a similar approach, and this trainer is an attempt to build a workflow to get a student producing a minimum viable statistical analysis in their language of choice as quickly as possible and then checking the quality of that analysis against a vetted reference analysis. 
 
 Following [principles of good design](/blog/posts/2026-11-ai-implementation-rules/index.qmd), we divide the workflow into two distinct stages, a planning stage and a reveal stage. Each stage begins with a new AI instance and has its own dedicated AI orientation documents and student briefs. The planning stage AI recieves its orientation document, the experimental design description, and the dataset. The reveal stage AI receives its own orientation document, the experimental design description, the dataset, as well as the solution key and the student's statistical report. This way each stage is kept independent, and the planning AI is unable to easily give away any information to the student. This was a common problem I encountered in my initial experiments with this workflow: an AI would be instructed not to reveal any information about the intended analysis, and then do something like name the dataset "logistic-regression-data.csv". 
 
@@ -28,9 +27,9 @@ While initial experimentation had the AI generate the datasets and the experimen
 
 Each pregenerated dataset comes with a chance of having a potential complication in the data that the student must account for. The current list of possible complications is violations of assumptions, underpowered true effects, aliased variables, outcome-dependent variables, post-treatment variables, confounding variables, and unbalanced groups. This is an intential design choice to force the student to diligently check their assumptions and variables. Currently, zero to one complications are chosen when generating each dataset, and these complications are checked to make sure they measurably distort the outcomes of the analysis if not correctly handled with the exception of underpowered true effects. For underpowered true effects, these complications are not meant to distort the analysis, but to impress on the student that even a correct analysis can miss true effects due to random chance in sampling or underpowered experiments.
 
-### Dataset generator
-
 ## Showcase
+
+We provide an example showcase of what this learning experience might look like with a student. We show the uploaded materials for both stages, a transcript of the chat logs for both stages, and the two drafts of the student's report.
 
 ### Stage 1
 
@@ -109,3 +108,13 @@ In stage 2, no substantive errors were found, so the only revision was to includ
 :::
 
 ## How AI was used
+
+In the design process, AI was used primarily to generate the datasets, experimental design descriptions, and review keys in the problem bank. Claude Opus 5.5 was asked to create a python program to generate data with a number of possible complications to the data as well as generating the text of a plausible associated experimental design. Claude was then used to check the dataset and ensure that any complication in the data are detectable. Then, Claude was used the generate a review key. The review key contains intended methods of analysis for the data based on the experimental design, a summary of the data, any included complications to the data and how that complication can influence the analysis if not handled, and the expected findings. This collection of experiments, datasets, and keys was then checked by a fresh instance of Claude Opus 5.5 to ensure accuracy. 
+
+## Reflection
+
+Overall, I'm happy with this project. I think it's a good workflow for getting started with a new software while practicing a full cycle of statistical analysis. For taking this project to the next level, I think it would be interesting to make a larger framework around this project that can persistently track a student's progress and adapt to their growth. This current project might be considered the easiest and most scaffolded, and we might increase the difficulty by adding multiple complications to the data, making the data messier and requiring cleaning as a first step, or by further restricting how much help the AI is allowed to give. 
+
+This might look like creating a webpage, similar to the [pharmacy calculations practice app](/portfolio/pharmacy-practice-app/index.qmd), that tracks the student's uploaded projects and "grades" each one, increasing the difficulty of future tasks as appropriate. This has a number of potential issues in implementation, particularly with how AI would be implemented into the web page itself and how usage would be kept reasonable. 
+
+Another possibility for implementing a persistent memory of student progress would be simply to have the AI revise and output a document at the end of each stage 2 that records each experiment and summarizes any issues with the student's report. The AI orientation documents could be revised to reference this progress document. This potential approach seems promising for keeping the project lightweight and portable, but we do run into some potential issues for how the student is actually given their harder datasets. It might be necessary to have the stage 1 AI generate the data itself from the Python program directly. This loses out on the testing and partitioned stages, though, so it's less than ideal. It might necessitate a three stage workflow, where the initial stage is to have the AI generate and check the data, and then move that into the usual stage 1 and stage 2 workflow. 

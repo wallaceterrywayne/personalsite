@@ -1,9 +1,9 @@
 ---
-title: "Welcome"
-description: "What this blog is about."
-date: 2026-11-01
-categories: [meta]
-draft: true
+title: "Welcome!"
+description: "What is this blog about?"
+date: 2026-10-30
+categories: [Meta]
+draft: false
 ---
 
-*First post. Remove `draft: true` above when it's ready to publish.*
+This blog is a place for me to publish my thoughts on education, mathematics, and AI. Expect a lot of stuff on how to use AI well in an educational context, various topics of interest I've encountered in my work, especially where it overlaps with math education, and maybe some ramblings about research and other more mathematics-leaning topics I'm interested in. 

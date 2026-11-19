@@ -3,7 +3,9 @@ title: "About"
 toc: false
 ---
 
-*Write a short professional bio here: role, background, and what you focus on.*
+I'm a mathematician and educator with a focus on health science education, mathematics education, and mathematics. I'm a mathematics learning specialist for the University of Tennessee Health Science Center, where I provide both academic coaching and math and statistics support to students across the health science spectrum. Most of my math students aren't struggling with the science, but instead getting stuck interpreting and processing the problem. My work with them focusing on identifying those sticking points and developing tools and approaches to address them.  
+
+I hold a master's degree in mathematics, and I continue to do research as a hobbyist. My math research interests focus on geometric function theory, harmonic and quasiconformal mappings in particular. I'm also interested in responsible AI applications to health science education, math education, and instructional design.
 
 ## Approach
 

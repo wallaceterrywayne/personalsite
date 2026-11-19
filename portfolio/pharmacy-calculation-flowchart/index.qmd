@@ -1,0 +1,127 @@
+---
+title: "Pharmaceutical Calculations Flowchart"
+description: "A process-oriented approach to common pharmaceutical calculations"
+date: 2026-11-16
+categories: [Pharmacy, Education, Instructional Design, Mathematics]
+image: ../files/A-flowchart.png
+# bibliography: references.bib
+# csl: apa-6th-edition.csl
+draft: false
+resources:
+  - files/*
+---
+
+## The problem
+
+Students in pharmacy programs often struggle with pharmaceutical calculations. While the actual math ability required to solve these problems isn't deep, many students come into these programs with shaky fundamentals, unprepared for the rigor and pace required by their programs, and ultimately struggle greatly trying to get up to speed with the wide variety of calculation problems on top of all their other work. To try and help these students get up to pace, just-in-time intervention targeting fundamental math skills is often used, and this type of intervention is both good and necessary. However, a solution process-oriented approach to pharmaceutical calculations can be very useful in complementing the standard fundamental skills approach to intervention.
+
+## The frameworks
+
+Common calculation topics covered in a pharmacy program include 
+
+* Dosage calculations,
+* Compounding and recipes,
+* Weighing accuracy,
+* Aliquots, 
+* Concentration expressions,
+* Specific gravity problems,
+* Single-solution analysis,
+* Dilution and evaporation,
+* Alligation,
+* Reconstitution,
+* Insulin,
+* Isotonicity,
+* Electrolytes, 
+* Pharmacokinetics, and 
+* Patient formulas (Creatinine clearance, body weight, IV to oral conversions, etc.).
+
+Presented like this, this list might seem daunting, but the skills and methods needed to solve these problems have much more overlap than a struggling student might expect. If we sort everything by required math skill, we get:
+
+* Plug-and-chug formulas, including
+  - Weighing accuracy,
+  - Dilution and evaporation,
+  - Pharmacokinetics, 
+  - Patient formulas,
+* Dimensional analysis, including
+  - Dosage calculations,
+  - Specific gravity
+  - Isotonicity,
+  - Insulin,
+  - Electrolytes
+* Proportional reasoning, including
+  - Compounding and recipes,
+  - Aliquots
+  - Concentration expressions,
+  - Single-solution analysis,
+  - Alligation, and
+  - Reconstitution.
+
+The vast majority of pharmaceutical calculation problems can be solved through one of three basic math skills; applying a memorized formula, using [dimensional analysis](/portfolio/whacc-method/index.qmd), or using proportional reasoning. Being able to use these three skills fluently is critical for success in any pharmacy program. For some students, though, it might not be sufficient to meet their needs, and a solution process approach can help fill the gaps. I propose the following flowchart.
+
+```{mermaid}
+%%| label: fig-flowchart
+%%| fig-cap: "A process-oriented flowchart for pharmaceutical calculations."
+flowchart TD
+  A[Is the problem a reconstitution/formula problem?] -->|Yes| B["<b>Use the memorized formula or reconstitution process.</b><div style='text-align:left'>• Reconstitution<br>• Dilution <br>• Patient formulas<br>• Pharmacokinetics </div>"]
+  A -->|No| M[Do several substances contribute to one total?]
+  M -->|Yes| G["<b>Solve using multi-substance table methods.</b><div style='text-align:left'>• Alligation<br>• Isotonicity<br>• Compounding </div>"]
+  M -->|No| C[Does the problem ask for units it already contains?]
+  C -->|Yes| F["<b>Solve using single-substance methods.</b><div style='text-align:left'>• Concentration expressions<br>• Single-solution analysis<br>• Aliquots</div>"]
+  C -->|No| D["<b>Solve using dimensional analysis.</b><div style='text-align:left'>• Dosage calculations <br>• Insulin<br>• Electrolytes<br>• Specific gravity</div>"]
+```
+
+This flowchart gives the students a tool to filter problems into different categories based on solution process. Memorized formula or reconsitution of dry powder problems are filtered out first. Reconsitution in particular has a somewhat unique two-prong solution process, where a student must first use the package instructions to calculation the volume of the powdered drug, and then apply that to a proportion to find the answer. The two-step nature of the problem, along with the addition of "hypothetical" information from the package insert of the drug, creates a solution process that doesn't readily fit into other categories, and students have to learn this type of problem on its own. After that, we filter out multiple combined substances that produce a single total solution, which often requires excellent bookkeeping to solve. The final filter is dimensional analysis methods or single-solution proportion-based methods. There is a great deal of overlap between these two solution processes, and either approach will work for many problems. Due to the relative robustness of dimensional analysis methods, this flowchart takes a maximal approach to which problems are assigned to the dimensional analysis category: if it can be solved with dimensional analysis, students are encouraged to use dimensional analysis over proportional methods. The key question dividing those two categories can be derived by comparing the units of the quantity the problem asks for to the units of the various information given in the problem. If no given information has the exact same units as the desired quantity, dimensional analysis can be used to solve. If a piece of given information does have the exact same units as the desired quantity, then proportional reasoning methods are used. 
+
+## Design rationale
+
+The idea behind this project was to help break down the space of possible pharmaceutical calculation problems along alternative lines to highlight difficulties students face that don't necessarily relate to an inability to set up a proportion or do dimensional analysis. Ultimately, pharmaceutical calculations are word problems, and any math educator knows that word problems are extradinarily difficult to teach well. They require excellent number sense and mathematical maturity compared to the actual difficulty of the required math, and many pharmacy students come into their programs with shaky math skills that can't really be addressed by a lecture on ratios and proportions. A solution process approach takes advantage of the fact that the space of common pharmaceutical calculation solutions isn't *that* large compared to all possible word problems, and many different problems have similar solution processes. We can lean on those similarities to highlight common strategies that math skill-based approaches might miss.
+
+For example, electrolyte-based problems (problems concerning milliequivalents, milliOsmols, etc.) are often straightforward dimensional analysis problems, but a student might not make that connection, because they're often taught with a complicated formula. We might also consider an isotonicity problem and an alligation alternate problem. 
+
+::: {.callout-note icon=false title="Isotonicity"}
+> A prescription calls for:
+> 
+> * Ephedrine sulfate 1% (E = 0.23)
+> * Chlorobutanol 0.5% (E = 0.24)
+> * Purified water q.s. ad 30 mL
+>
+> How many grams of sodium chloride should be added to make the solution isotonic?
+:::
+
+::: {.callout-note icon=false title="Alligation alternate"}
+> How many grams of 20% zinc oxide ointment and 5% zinc oxide ointment should be combined to prepare 300 g of 10% zinc oxide ointment?
+:::
+
+Certainly, these problems seem very different, and they primarily use different fundamental math skills. The isotonicity problem might be thought of as repeated dimensional analysis as you calculate the NaCl-equivalent contribution from each ingredient, and the alligation alternate problem is ultimately about setting up a proportion, but students struggle with these problems in the same way: they struggle in the bookkeeping. If we run each problem through the flowchart, though, we find they each land in the multi-substance table methods. This allows us to highlight the bookkeeping as the key component of the solution process. 
+
+::: {.callout-note icon=false title="Isotonicity"}
+> A prescription calls for:
+> 
+> * Ephedrine sulfate 1% (E = 0.23)
+> * Chlorobutanol 0.5% (E = 0.24)
+> * Purified water q.s. ad 30 mL
+>
+> How many grams of sodium chloride should be added to make the solution isotonic?
+
+| Ingredient | Concentration | Amount (g) | E value | NaCl equivalent (g) |
+|---|---|---|---|---|
+| Ephedrine sulfate | 1% | ? | 0.23 | ? |
+| Chlorobutanol | 0.5% | ? | 0.24 | ? |
+| **Total** | | | | ? |
+:::
+
+::: {.callout-note icon=false title="Alligation alternate"}
+> How many grams of 20% zinc oxide ointment and 5% zinc oxide ointment should be combined to prepare 300 g of 10% zinc oxide ointment?
+
+| Ingredient | Concentration | Amount | Parts |
+|---|---|---|---|
+| Zinc oxide ointment | 20% | ? | ? |
+| Zinc oxide ointment | 5% | ? | ? |
+| **Total (product)** | 10% | 300 g | ? |
+:::
+
+For each problem, setting up and filling out the table is what we want students to focus on, and the dimensional analysis or proportion components of the problem become more of an afterthought, because that's not where students tend to struggle on these multi-substance problems. 
+
+## Reflection
+
+This project originally started as an attempt to fully characterize pharmaceutical calculations by solution type and math skills. While this was not completely successful, the broad strokes classification used in the flowchart is still useful. In the [pharmaceutical calculations practice app](/portfolio/pharmacy-practice-app/index.qmd), the idea was used to sort problems into broad solution-process categories. To write out the solutions for each problem, solution templates were made up of modular pieces that could be shared between problems with similar solution processes. For example, dimensional analysis problems all use the [WHACC method](/portfolio/whacc-method/index.qmd), single-substance problems often use proportions based on concentration or amount of solute/solvent/solution, and multi-substance problems use tables to do the bookkeeping. 

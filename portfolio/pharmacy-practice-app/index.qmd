@@ -1,21 +1,16 @@
 ---
 title: "Daily Practice App for Pharmacutical Calculations"
-description: "Spaced-repetition practice for pharmaceutical calculations backed by a verified bank of generated problems."
+description: "Spaced-repetition practice app for pharmaceutical calculations using a verified bank of generated problems."
 date: 2026-10-30
-categories: [pharmacy, spaced-repetition, math]
+categories: [pharmacy, spaced-repetition, math, AI]
+image: ../files/A-pharmacy.png
 ---
 
 ## The problem
 
-It is a common issue that students entering pharmacy programs struggle mightily with the calculations required by the program. Certainly, any math educator will flag weak fundamentals as the most common reason students struggle in mathematics, and pharmacy students are no different. While the math required by pharmacy programs is relatively low-level, it's embedded in a more difficult scientific context, might not have been seen by the student in years, and just a small part of a program that keeps a punishing pace.
+Students in pharmacy school face unique challenges with pharmaceutical calculations. One problem in particular is the need for long-term retention of the material for boards. Pharmacy programs tend to be four year programs with the first three years being didactic and the final year being clinical rotations. Pharmaceutical calculations are often introduced in the first year, but then there's a gap of three or more years before that material is required for board exams. To prepare students, pharmacy programs will commonly have cumulative review checkpoints throughout their curriculum to ensure that a student has retained (or recrammed) a basic level of understanding of pharmaceutical calculations. For example, a calculation refresher class during the third year and a board review program in the fourth year.
 
-The "proper" answer for weak math fundamentals is for the student to diligently go back and practice each fundamental skill, starting with basic arithmetic and slowly working their way up to the skills relevant for their current goals. This is not practical advice for a student struggling with math in a pharmacy program, however. Instead, we focus more on just-in-time intervention, attempting to shore up a student's basic skills as they become relevant to the more demanding calculation problems at hand, before sending them off to face the exam and then pivoting to the next topic. This approach, although necessary, leads to some painful consequences for the student later on.
-
-Under this just-in-time approach, a student is constantly in crisis in math, as each new topic demands a new set of skills and solution process. Old material must be left by the wayside as they turn their focus to the new crises at hand, naturally falling into a "cram and move on" routine with math that never lets them develop long-term retention or fluency with the material. This is an approach that will surely be familiar to educators at the high-school and undergraduate level. For students who will later go on to be accepted to pharmacy school, though, they can survive this routine at the undergraduate and high-school levels, where courses are slower paced, final exams might not be cumulative, and the content can be safely forgotten once the course is finished. 
-
-In pharmacy school, however, none of these things hold true. The NAPLEX, the licensure exam for prospective pharmacists in the US, waits for these students after they complete their programs, and it demands long-term retention of all the content covered during their program. To prepare students, pharmacy programs will commonly have cumulative review checkpoints throughout their curriculum to ensure that a student has retained (or recrammed) a basic level of understanding of pharmaceutical calculations. For example, a calculation refresher class during P3 and a board review program in P4. Unfortunately, this often just recreates the cramming cycle, and doesn't necessarily lead to long-term retention of the material. 
-
-For other parts of the pharmacy school curriculum, such as the Top 300 Drugs, students can rely on spaced-repetition programs such as Anki to develop long-term retention of the relevant material, but Anki is a flashcard-based program, and so it is not readily applicable to calculation-based material. Instead, calculation problems are typically given out as homework as those types of problems are covered in their respective courses, or large review packets are handed out as preparation for cumulative exams or NAPLEX prep courses. In both cases, the calculation problems are not delivered in a method consistent with spaced-repetition approaches to long-term retention of skills, nor is it reasonable to expect an instructor in such a course to deliver individualized spaced-repetition plans for each student. This practice app is meant to fill that gap.
+In spite of these refreshers, students often struggle with retention of the pharmaceutical calculation strategies. In other areas, such as the Top 300 drugs, students can rely on proven, spaced-repetition programs (such as Anki) to aid in retaining this sort of information, but no easy spaced-repetition program exists for pharmaceutical calculations. This program is an attempt to fill that gap.
 
 ## Design rationale
 
@@ -48,7 +43,7 @@ A demo version of the app can be found [here](https://wallaceterrywayne.github.i
 
 ## How AI was used
 
-This project fell under a level 1 AI-assisted educational project where the focus is on keeping AI involvement separate from the student experience. AI was used heavily in the question bank development and app coding. To ensure high-quality questions that fully encapsulated the pharmaceutical calculations needed by students in a pharmacy programs, and I began by writing up a list of the relevant topics. Then, for each topic, they were divided into skills based on the solution processes needed. For example, dilution and evaporation problems, while seemingly divided into two separate skills, actually follow nearly identical solution processes: solve a single variable equation for $c_1 v_1 = c_2 v_2$. Single-solution problems, on the other hand, were divided into three skills depending on if the student needed to identify concentration, amount of drug or total, or amount of solvent. Once the list of topics and skills was finalized, Claude Opus 5.5 was utilized to create roughly a dozen different problem templates per skill (changing the relevant drug or scenario). Then, for each template, five or six individual problems were generated to make up the problem bank. 
+This project fell under a [level 1](/blog/posts/2026-11-ai-instructor-framework/index.qmd) AI-assisted educational project, where the focus is on keeping AI involvement separate from the student experience. AI was used heavily in the question bank development and app coding. To ensure a high-quality question bank that fully covered the different calculations encountered by pharmacy students, a list of topics was written by the author. Then, for each topic, they were divided into skills based on the solution processes needed, referencing [this calculations flowchart](/portfolio/pharmacy-calculation-flowchart/index.qmd). For example, dilution and evaporation problems, while seemingly divided into two separate skills, actually follow nearly identical solution processes: solve a single variable equation for $c_1 v_1 = c_2 v_2$. Single-solution problems, on the other hand, were divided into three skills depending on if the student needed to identify concentration, amount of drug or total, or amount of solvent. Once the list of topics and skills was finalized, Claude Opus 5.5 was utilized to create roughly a dozen different problem templates per skill (changing the relevant drug or scenario). Then, for each template, five or six individual problems were generated to make up the problem bank. 
 
 To avoid AI-hallucinations, the individual problems used randomly generated input numbers generated by the AI to fall within reasonable expected ranges for the template's drugs. The solutions to each problem, on the other hand, were generated programmatically from the input numbers using an AI-created Python program for each problem template. I then checked an examplar from each skill to check for any obvious errors. To further ensure the accuracy of problems, I engage in a daily routine of solving my own practice questions to identify bad questions or otherwise check the quality of the app. 
 
@@ -89,7 +84,7 @@ The average results for expected time spent studying across several different me
 | App + cram everything | 789 | 52.4 | 99% | 88% |
 : Time and recall (averaged over the six students; 4 minutes per problem; class and homework time kept constant for each strategy.) {#tbl-cohort}
 
-Do note that these simulations used a very simplified mathematical model for skill decay, and these results shouldn't be compared to actual student performance on an exam. The simulated results mostly confirm the common knowledge that more time spent studying results in higher scores, but app usage divides up 22 expected study hours into 15-minute/day sized chunks, and it improves retention 30 days later over cramming-relient strategies. Both of these aspects are highly desirable for our target student population (extremely busy pharmacy students who need to retain information for boards), and so this simulation is taken as a positive signal. The dismal course homework only scores assume a student who does the assigned homework and then never reviews that information again, so this is also expected as baseline performance.
+Note that these simulations used a very simplified mathematical model for skill decay, and these results shouldn't be compared to actual student performance on an exam. The simulated results mostly confirm the common knowledge that more time spent studying results in higher scores, but app usage divides up 22 expected study hours into 15-minute/day sized chunks, and it improves retention 30 days later over cramming-reliant strategies. Both of these aspects are highly desirable for our target student population (extremely busy pharmacy students who need to retain information for boards), and so this simulation is taken as a positive signal. The dismal course homework only scores assume a student who does the assigned homework and then never reviews that information again, so this is also expected as baseline performance.
 
 <!-- ## Privacy and ethics
 
@@ -97,8 +92,8 @@ Do note that these simulations used a very simplified mathematical model for ski
 
 ## Evidence of impact
 
-*Usage and outcomes, as available.*
+*Usage and outcomes, as available.* -->
 
-## Reflection and next steps
+## Reflection
 
-*What you'd change; the CLS program; the diagnostic framework.* -->
+This app was met with some excitement from students, many of who are already familiar with the Anki app. The author, while also doing daily practice problems from the app, has noticed a marked improvement in readiness for doing these calculations, even as someone with prior expertise in the topic. Given the potential for this app to aid with board prep, next steps will hopefully involve a small pilot study with fourth-year pharmacy students in a board prep program. 
