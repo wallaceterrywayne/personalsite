@@ -3,15 +3,12 @@ title: "About"
 toc: false
 ---
 
-I'm a mathematician and educator with a focus on health science education, mathematics education, and mathematics. I'm a mathematics learning specialist for the University of Tennessee Health Science Center, where I provide both academic coaching and math and statistics support to students across the health science spectrum. Most of my math students aren't struggling with the science, but instead getting stuck interpreting and processing the problem. My work with them focusing on identifying those sticking points and developing tools and approaches to address them.  
+I'm Terry Wallace. I'm an educator and math guy with a focus on health science and math education. I'm a learning specialist for the University of Tennessee Health Science Center, where I provide academic coaching as well as math and statistics support to students across the health science spectrum. Most of my math students aren't struggling with the science, but instead getting stuck interpreting and processing the problem. My work with them focuses on identifying those sticking points and developing tools and approaches to address them. I write about the overlap between health science and math education, responsible AI use in instructional design, and ways to use AI effectively as an educational tool.
 
-I hold a master's degree in mathematics, and I continue to do research as a hobbyist. My math research interests focus on geometric function theory, harmonic and quasiconformal mappings in particular. I'm also interested in responsible AI applications to health science education, math education, and instructional design.
-
-## Approach
-
-*A few sentences on your teaching and learning philosophy, and your
-principles for using AI in education.*
+I hold a master's degree in mathematics from Technion - Israel Institute of Technology, and I continue to do research as a hobbyist. My research interests focus on geometric function theory, harmonic and quasiconformal mappings in particular. 
 
 ## Contact
 
-*Email, LinkedIn, CV link.*
+Email: [wallaceterrywayne@gmail.com](mailto:wallaceterrywayne@gmail.com)
+LinkedIn: [https://www.linkedin.com/in/terry-wallace-594660270/](https://www.linkedin.com/in/terry-wallace-594660270/)
+Orchid: [https://orcid.org/0009-0003-9692-5461](https://orcid.org/0009-0003-9692-5461)
