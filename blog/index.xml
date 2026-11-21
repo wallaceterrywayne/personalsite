@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Terry Wayne Wallace</title>
+<link>https://terrywaynewallace.com/blog/</link>
+<atom:link href="https://terrywaynewallace.com/blog/index.xml" rel="self" type="application/rss+xml"/>
+<description>Academic coaching, math learning support and AI-assisted tools for health science education</description>
+<generator>quarto-1.11.9</generator>
+<lastBuildDate>Mon, 09 Nov 2026 06:00:00 GMT</lastBuildDate>
+<item>
+  <title>How to implement AI assignments in the classroom</title>
+  <link>https://terrywaynewallace.com/blog/posts/2026-11-ai-implementation-rules/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>In <a href="../../../blog/posts/2026-11-ai-instructor-framework/index.html">this post</a> we examined some guidelines for deciding how much AI usage is appropriate for students at different levels, but we provide no rules for actually implementing AI effectively. In particular, once we start allowing the AI and the student to interact directly, we open up a huge range of outcomes that we have limited control over. Unfortunately, many of these outcomes are bad, and so we must take care in how such AI assignments are implemented. To that end, I propose some guidelines to help keep things on track, and ensure that the student experience matches what you had in mind.</p>
+<section id="design-principles" class="level2">
+<h2 class="anchored" data-anchor-id="design-principles">Design Principles</h2>
+<section id="set-clear-expectations" class="level3">
+<h3 class="anchored" data-anchor-id="set-clear-expectations">Set clear expectations</h3>
+<p>Designing a good AI assignment isn’t ultimately different from designing a good non-AI assignment. In both cases, setting clear expectations for all parties is critical. In the AI case, it’s even more important, since the AI is another entity that needs to have clear expectations for its role in the assignment, and its role in the assigment <em>must</em> be crystal clear. I recommend included an orientation document as part of the packet of documents that is uploaded to the AI, as shown in my <a href="../../../portfolio/statistics-training/index.html">statistics report trainer</a>. For each stage of the project, along with the student-specific work, the AI receives an orientation.md file that outlines the overall project, which stage of the project is currently active, the specific actions the AI and the student should take during this stage, the desired outcome and deliverables of this stage, and the boundaries of permissible behavior for both the AI and the student. This is not a foolproof way of forcing the AI to act within the bounds you want to set for the assignment, but it goes a long way to priming the AI to create the right learning experience.</p>
+<p>Similarly, the expectations should be equally clear for the student as well. This might take the form of a student brief, as included in the aforementioned statistics report trainer, or some other form, but the instructions should be clear for the student as well. You might even considering an in-class activity walking through an example assignment together, where you play the role of a student participating in the assignment. If practical, you can even include the chat log of the walkthrough as part of the assignment instructions, so it’s clear at each moment how the student should be engaging with the project.</p>
+</section>
+<section id="use-ai-as-little-as-possible" class="level3">
+<h3 class="anchored" data-anchor-id="use-ai-as-little-as-possible">Use AI as little as possible</h3>
+<p>This may seem somewhat contradictory given the general tone of the rest of this website, but bringing AI into an academic setting necessarily cedes control over part of the learning experience to that AI. If you can avoid doing this, then you should. This guidelines holds not just for the binary “should I use AI at all”, but how much AI is used. For example, with my statistics report trainer, that project began as a personal project to help me learn R. During that time, I used the AI haphazardly to generate experimental designs and datasets on the spot. When adapting that experience to a student assignment as presented in the portfolio piece, that level of AI usage became unacceptably prone to subtle errors, so instead of having the AI generate designs and data on the spot, we restrict it to pre-made and vetted datasets generated using Python. While students can easily get practice problems directly from an AI, in my <a href="../../../portfolio/pharmacy-practice-app/index.html">pharmacy calculation practice tool</a>, I restricted all direct AI/student interaction. Instead, I worked with AI to generate a problem bank from worked templates along with Python to generate the solutions programmatically from problem input numbers. In both cases, I’m not blindly ceding responsibility for learning to the AI, but using AI in a limited way to develop a vetted question bank that I have full control over.</p>
+</section>
+<section id="one-chat-one-task" class="level3">
+<h3 class="anchored" data-anchor-id="one-chat-one-task">One chat, one task</h3>
+<p>When both designing and assigning a task that involves AI, it’s useful to get into the habit of switching instances often. As the chat history grows longer and longer, the initial context of the chat has less and less influence on the behavior of the AI. The well-crafted orientation document is useless if the AI forgets about it, and a tightly restricted AI learning experience can readily become a mess if those restrictions get lost in the shuffle. To keep the AI sharp and on-task, it’s important to start fresh from a new instance regularly. In the statistics trainer tool, for instance, I have an entire second set of orientation documents for the evaluation stage of the experience. Not only does this ensure that the AI stays on target, it also prevents earlier instances from inadvertantly revealing answers to the student. Every instance has only what it needs for each stage, and switching to a new instance is built into the expectations for the experience.</p>
+</section>
+</section>
+<section id="oversight-principles" class="level2">
+<h2 class="anchored" data-anchor-id="oversight-principles">Oversight Principles</h2>
+<section id="trust-but-verify" class="level3">
+<h3 class="anchored" data-anchor-id="trust-but-verify">Trust, but verify</h3>
+<p>As AI is implemented more and more freely, as responsibility for learning is shifted from the instructor to the student, the temptation to use AI in unintended ways grows and grows. While you can prime the AI to redirect the student or set boundaries in the orientation document, this is not foolproof, and a determined student can find ways around any boundaries you care to set. One way this behavior can be mitigated, though, is through oversight of the student’s interactions with the AI. For example, we might require the chat logs for a given AI assignment to be turned in alongside the assignment.</p>
+</section>
+<section id="avoid-rogue-ai" class="level3">
+<h3 class="anchored" data-anchor-id="avoid-rogue-ai">Avoid rogue AI</h3>
+<p>Whenever possible, the AI should not be an independent source of truth. It’s all too easy for an AI to get fixated on the wrong thing, miss important context, or <a href="https://www.cbsnews.com/news/aircanada-chatbot-discount-customer/">just make stuff up</a>. Obviously, we want to avoid that in our learning experiences. There’s not a foolproof way to do this, but we can stack the deck on our favor by providing a source of truth and instructing the AI to use only this source. We might include excerpts from textbooks or lecture notes in our uploaded material for an assignment, or we might pre-generate a question and solution bank and have the AI refer to that.</p>
+</section>
+<section id="fully-test-on-a-new-instance" class="level3">
+<h3 class="anchored" data-anchor-id="fully-test-on-a-new-instance">Fully test on a new instance</h3>
+<p>Lastly, we want to make sure anything we’re releasing to students has been thoroughly tested, and the principles for this testing are very similar to the principles we would use for proofreading, editing, or testing in other contexts as well. It’s always useful to get another set of eyes to catch things you might miss, and this holds true for AI. As an instance of AI continues to do things, it’s adding more and more text to its local context. Much like a human, it will solve problems, gain new insight, and create assumptions that another instance of AI will not have. Even giving another instance the full text of that entire history will not recreate the internal model of the previous instance. Then, it is critical that you use fresh instances to rigorously test your learning experience, tweak your orientation documents, and ensure that the student’s experience matches your plan.</p>
+<p>This idea holds for using an AI to sanity check work. For example, if you want AI to do a pass of a question bank to identify potential errors, it’s much better to use a separate instance from the creation instance. You might even consider using an entirely different model to do this testing.</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>AI</category>
+  <category>Education</category>
+  <category>Instructional Design</category>
+  <guid>https://terrywaynewallace.com/blog/posts/2026-11-ai-implementation-rules/</guid>
+  <pubDate>Mon, 09 Nov 2026 06:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>A Gradual Release of Responsibility</title>
+  <link>https://terrywaynewallace.com/blog/posts/2026-11-ai-instructor-framework/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>In education, there’s a concept, first introduced by David Pearson and Margaret Gallagher, called the gradual release of responsibility <span class="citation" data-cites="pearson1983">(Pearson &amp; Gallagher, 1983)</span>. This is a pedagogical method wherein the instructor initially holds all the responsibility for learning, and students are gradually given more and more responsibility until they are learning independently. In a math setting, let’s say, learning how to complete the square to solve quadratic equations, this might look like</p>
+<ul>
+<li>The instructor works through an entire problem showing each step of the completing the square algorithm.</li>
+<li>The instructor works through another completing the square problem, but this time, they stop before a couple of steps and ask the students what the next step should be.</li>
+<li>The instructor works through another problem, and asks the students what comes next for each step.</li>
+<li>The instructor gives one more problem, and has the students solve the problem while they observe.</li>
+<li>The instructor gives homework to be completed independently.</li>
+</ul>
+<p>And so, the responsibility for learning initially rested entirely on the instructor’s shoulders, but more and more responsibility was handed off to the student until they were expected to complete the homework by themselves. This is sometimes referred to as “I do, we do, you do” instruction, first coined by Doug Fisher and Nancy Frey <span class="citation" data-cites="fisher2008">(Fisher &amp; Frey, 2008)</span>. While this framework is most commonly applied to instructor/student interactions on a lesson-by-lesson basis, we can zoom out and apply it more broadly to a student’s educational career. A student beginning elementary school is, broadly speaking, engaged in “I do” work. The responsibility for their learning rests entirely with the instructor, and the student has little to no control over their educational experience. For the most part, the student remains in the “I do” stage throughout high school. The student is taking classes required by their school with very little independent choice. They learn to do trigonometry or write an essay by following strict formulas. They read books that are assigned by their teachers. None of this, in a vacuum, is bad. The “I do” stage is very important, both within a single lesson and within education itself. A student has to learn how to learn before they can go out and do it effectively on their own, and we see this progression in undergraduate education. A student slowly picks their major, works through upper level courses, and finally completes a bachelor’s thesis; they work through the “we do” stage, gradually taking more and more responsibility for their own learning. And then when a student progresses to grad school, they’re often in a situation where they’re solely responsible for learning the material.</p>
+<p>The key factors that govern this large-scale gradual release of responsibility (GRR) are student motivation and expertise. Without the motivation to actually learn, you can’t trust a student not to seek shortcuts, and without the expertise, you can’t rely on the student to judge whether they’re truly learning effectively. As the student’s expertise grows, they become more able to learn for themselves, and they’re afforded more freedom to focus on subjects they have passion for, increasing their motivation. Alongside this growth, they’re entrusted with more responsibility for their own learning.</p>
+<p>This is the framework into which we’re trying to implement AI, and so we must take into account where the responsibility for learning lies when deciding what AI usage is appropriate. With the advent of LLMs, there are three entities that can hold some amount of responsibility for student learning: the instructor, the AI, and the student. Getting the balance right is critical, as many educators have learned.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://terrywaynewallace.com/blog/posts/2026-11-ai-instructor-framework/ai-midterm-final.webp" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Takehome midterms grades vs.&nbsp;in-person final grades for Brown University professor Roberto Serrano’s ECON 1170 course. Here, the suspected cause of the grade discrepency is private AI use by students, and not AI implementation by Professor Serrano.</figcaption>
+</figure>
+</div>
+<p>There has obviously been work on this question previously. Perkins, Furze, Roe, and MacVaugh released a paper detailing a descriptive framework of AI usage in educational assessments in 2024 <span class="citation" data-cites="perkins2024">(Perkins, Furze, Roe, &amp; MacVaugh, 2024)</span>. Their framework is no AI, AI-assisted idea generation and structuring, AI-assisted editing, AI task completion and human evaluation, and full ai. While this is a solid descriptive framework, it primarily focuses on different levels of independent student usage of AI to complete assignments. It doesn’t supply a guiding principle for the instructor to decide which level is appropriate for their students, and this is the gap I believe a GRR framework can fill.</p>
+<p>In lower level courses, which students are often forced to take with little to no input, AI interaction should be extremely restrained. Up through undergraduate introductory or general education courses, AI should mostly be used by the instructor to implement tools they might not be able to do otherwise. Once a student has been able to start a degree path and invest time developing their expertise in their chosen subject, then they should be able to shoulder the burden of more unrestricted AI usage, although it should be with well-defined objectives and limitations. Unrestricted AI usage, insofar as it has anything to do with accredited education, should be limited to students working with a great deal of expertise and motivation. A graduate student researcher, for instance, might well utilize AI in an unrestricted manner to learn new tools, statistical methods, and gain a deeper overview of their field, and this is good AI usage! But it only comes into play when a student is able to take responsibility for their own learning, like we expect for graduate students. Earlier than that, I fear the results of Professor Serrano’s infamous ECON 1170 course are the rule rather than the exception <span class="citation" data-cites="whitford2026">(Whitford, 2026)</span>.</p>
+<p>I propose the following framework to help differentiate different levels of AI responsibility.</p>
+<dl>
+<dt>Level 1</dt>
+<dd>
+&nbsp;&nbsp;&nbsp;&nbsp;No direct AI/student interaction. All responsibility remains with the instructor.
+</dd>
+<dt>Level 2</dt>
+<dd>
+&nbsp;&nbsp;&nbsp;&nbsp;AI is used to interpret student responses. Almost all responsibility remains with the instructor.
+</dd>
+<dt>Level 3</dt>
+<dd>
+&nbsp;&nbsp;&nbsp;&nbsp;AI is able to reply to student responses within the scope of a well-defined exchange. The instructor defines system prompts for the AI and objective briefings for the student, and the responsibility entrusted to the student and to the AI is determined by the scope of the prompt and the briefing.
+</dd>
+<dt>Level 4</dt>
+<dd>
+&nbsp;&nbsp;&nbsp;&nbsp;AI may be used freely to investigate. The instructor may set an assignment scope, but all remaining responsibility for learning rests with the student.
+</dd>
+</dl>
+<p>At level 1, the AI is a nonentity in the learning exchange. If AI is used, it is used solely to develop a tool, and the instructor bears all responsibility for the accuracy and content of this tool. This is where, I believe, the bulk of potential for AI usage lies, letting instructors develop tools that weren’t feasible for them before. My <a href="../../../portfolio/pharmacy-practice-app/index.html">pharmacy calculation practice app</a> is one such example. It was always theoretically possible for me to make this tool, but I never would have found the time to develop it on my own. While AI was used heavily to develop the question bank, I still bear the responsibility to the accuracy of these questions, which I tried to ensure by programmatically generating solutions from problem inputs, checking initial questions by hand, editing solution templates, and continuing to use the tool itself daily so that I can catch other potential problems I missed. The student never actually interacts with the AI.</p>
+<p>At level 2, AI can be used to interpret student work, but the AI does not reply to the student. We might consider using AI to identify and sort mistakes in student calculations as an example of a level 2 AI usage. We’ve started to release some responsibility to the AI, but the student experience hasn’t changed from level 1. They’re still doing the same work, and the difference here is how we’re interacting with that work. While I don’t think AI should ever take sole responsibility for grading student work, modern LLMs offer an ability to investigate, interpret, and categorize student work that hasn’t existed. For example, it would be possible to save and scan a semester’s worth of student math work and then analyze the work and sort the errors into conceptual, procedural, and computational errors. This data can then be used to identify pain points in pedagogy or areas of weakness in student prerequisite skills.</p>
+<p>Level 3 is where the student and the AI are finally allowed to interact directly. This is the level that every new edtech company under the sun is trying to develop tools for, and this is the level where we must take the most care as educators.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://terrywaynewallace.com/blog/posts/2026-11-ai-instructor-framework/mcdonalds-ai-chatbot.webp" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>A staged screenshot showing a customer asking a McDonald’s chatbot to write a python program <span class="citation" data-cites="goel2026">(Goel, 2026)</span>.</figcaption>
+</figure>
+</div>
+<p>Here, it’s very easy for a student to overstep the bounds of the assignment, either to disengage with the work altogether or to undercut the desired learning experience of the assignment. Unless you have students that are motivated enough by the material to remain within the guidelines you set for the assignment, you might restrict these assignments to in-class only or require logs of student interactions. Level 3 assignments have a very wide range in how much responsibility rests with the AI. At the lowest level, the interaction might consist of a single prompt and response between the student and AI. At the higher ranges, the interaction might look more like a tutoring session. The <a href="../../../portfolio/statistics-training/index.html">statistics analysis trainer</a> is an example of a higher range level 3 interaction. At this level, it is critical to define exactly what your expectations are for both the student and the AI. For the AI, we might craft a strong system prompt that defines the setting of the interaction, the steps and expected student responses at each step, as well as instructions to redirect the student back to the assignment if they start to go outside the boundaries. For the student, we want a similarly strong orientation brief that lays out the exact expectations of the student at each step of the interaction and what the end-product of the interaction should be.</p>
+<p>Finally, level 4 is where the student bears total responsibility for their own learning, with the instructor only providing the assignment parameters, and might be best thought of as self-study. My personal attempts to learn R, which led to the aforementioned R analysis session framework, might fall under this category. I started that project because I wanted to learn R for my own benefit, and so I could trust myself not to seek shortcuts. I also had the relevant expertise, having a master’s degree in mathematics, to be able to guide the AI when it started to get hung up on irrelevant points. If a student is not able to handle both, it’s difficult to justify allowing this sort of interaction in an actual course. Insofar as a level 4 assignment might appear in a primary, secondary, or undergraduate curriculum, I can only imagine it working as some sort of low-stakes, participation-only assignment and should otherwise be avoided.</p>
+<p>This might seem unnecessarily restrictive to those that view a greater and more transformative role for AI in the classroom. We want to encourage AI fluency, and students will use AI freely in their own time, so we must implement AI widely in education to keep up. I think this misses the point. While AI is poised to make great changes to the field of education, and I believe it has the potential to do so in positive ways, it does not fundamentally change the nature of human learning. It gives educators a new and powerful tool to craft educational experiences that would have been impossible previously, but it does not transform unprepared learners into capable, independent learners. Additionally, we can implement these sorts of AI fluency activities into the classroom. Indeed, an occasional level 3 activity with supervision and chat logs, does help teach AI fluency. An assignment to generate an AI essay and then grade that essay based on a rubric would be one excellent way to teach both the limitations to AI and allow the students to approach the essay writing process from a new direction. But, ultimately, if we want the student to learn how to write an essay, they must actually write an essay, and that’s not something we can thrust upon the students without first slowly giving them the tools, knowledge, and responsibility to do so.</p>
+
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2">
+<div id="ref-fisher2008" class="csl-entry">
+Fisher, D., &amp; Frey, N. (2008). <em>Better learning through structured teaching: A framework for the gradual release of responsibility</em>. ASCD.
+</div>
+<div id="ref-goel2026" class="csl-entry">
+Goel, H. (2026). The McDonald’s chatbot that <span>“wrote python”</span>: A fake story with a real lesson. Retrieved from <a href="https://medium.com/@hardik.goel214/the-mcdonalds-chatbot-that-wrote-python-a-fake-story-with-a-real-lesson-ec12b3b6ddb9">https://medium.com/@hardik.goel214/the-mcdonalds-chatbot-that-wrote-python-a-fake-story-with-a-real-lesson-ec12b3b6ddb9</a>
+</div>
+<div id="ref-pearson1983" class="csl-entry">
+Pearson, P. D., &amp; Gallagher, M. C. (1983). The instruction of reading comprehension. <em>Contemporary Educational Psychology</em>, <em>8</em>(3), 317–344.
+</div>
+<div id="ref-perkins2024" class="csl-entry">
+Perkins, M., Furze, L., Roe, J., &amp; MacVaugh, J. (2024). The artificial intelligence assessment scale (AIAS): A framework for ethical integration of generative AI in educational assessment. <em>Journal of University Teaching and Learning Practice</em>, <em>21</em>(6).
+</div>
+<div id="ref-whitford2026" class="csl-entry">
+Whitford, E. (2026). Brown professor suspects majority of his class used AI to cheat. Retrieved from <a href="https://www.insidehighered.com/news/faculty/learning-assessment/2026/07/08/brown-professor-suspects-most-his-class-used-ai-cheat">https://www.insidehighered.com/news/faculty/learning-assessment/2026/07/08/brown-professor-suspects-most-his-class-used-ai-cheat</a>
+</div>
+</div></section></div> ]]></description>
+  <category>AI</category>
+  <category>Education</category>
+  <category>Instructional Design</category>
+  <guid>https://terrywaynewallace.com/blog/posts/2026-11-ai-instructor-framework/</guid>
+  <pubDate>Mon, 02 Nov 2026 06:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Welcome!</title>
+  <link>https://terrywaynewallace.com/blog/posts/2026-11-welcome/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>This blog is a place for me to publish my thoughts on education, mathematics, and AI. Expect a lot of stuff on how to use AI well in an educational context, various topics of interest I’ve encountered in my work, especially where it overlaps with math education, and maybe some ramblings about research and other more mathematics-leaning topics I’m interested in.</p>
+
+
+
+ ]]></description>
+  <category>Meta</category>
+  <guid>https://terrywaynewallace.com/blog/posts/2026-11-welcome/</guid>
+  <pubDate>Fri, 30 Oct 2026 05:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

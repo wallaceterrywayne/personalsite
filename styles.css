@@ -1,0 +1,11 @@
+/* Custom styles go here */
+.navbar-brand { font-weight: 600; }
+
+.file-box {
+  max-height: 700px;
+  overflow-y: auto;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+pre.file-box { white-space: pre-wrap; }
