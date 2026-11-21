@@ -1,6 +1,6 @@
 ---
 title: "Terry Wayne Wallace"
-subtitle: "Mathematics Learning Specialist · Academic Coach · Health Science Education"
+subtitle: "Learning Specialist · Academic Coach · Instructional Designer"
 toc: false
 ---
 
@@ -9,10 +9,10 @@ toc: false
 ## Featured work
 
 - [**Daily Practice Apps for Pharmacy Calculations**](portfolio/pharmacy-practice-app/index.qmd)
-  : spaced-repetition practice with a verified bank of generated problems.
+  : A spaced-repetition practice with a verified problem bank.
 
-- [**End-to-End Statistics Report Trainer**](/portfolio/r-statistics-training/index.qmd)
-  : AI-enabled independent practice workflow for statistical analysis with a verified bank of generated datasets.
+- [**End-to-End Statistics Report Trainer**](/portfolio/statistics-training/index.qmd)
+  : An AI-enabled independent practice workflow for statistical analysis with a pregenerated and verified datasets.
 
 ## Recent writing
 

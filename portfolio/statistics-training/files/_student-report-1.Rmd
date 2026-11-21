@@ -1,0 +1,135 @@
+---
+title: "Colectomy Data Report"
+output: html_document
+date: "2026-11-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
+library(ggpubr)
+library(emmeans)
+library(effectsize)
+library(performance)
+library(knitr)
+```
+
+```{r load-data}
+dat <- read_csv("colectomy-data.csv")
+dat <- dat %>%
+  mutate(
+    approach = factor(approach),
+    diabetes = factor(diabetes)
+  )
+str(dat)
+summary(dat)
+```
+
+## Experimental Design
+
+A surgical department randomized 200 adults scheduled for elective colectomy to either open surgery or laparoscopic surgery, 100 patients per approach. Before surgery, staff recorded each patient’s age, body mass index, and whether they had diabetes. The hospital’s records system also captured how many days each patient stayed in hospital after the operation.
+
+Thirty days after surgery, patients completed the QoR-15, a quality-of-recovery questionnaire scored from 0 to 150, with higher scores meaning better recovery.
+
+The department wants to know whether surgical approach affects quality of recovery at 30 days.
+
+## Analysis of Data
+
+Our main independent variable is the surgical approach, and our main dependent variable is the QoR-15 score taken 30 days post surgery. Since our outcome variable is continuous, our main independent variable is categorical, and we also have other continuous variables we'd like to account for, we will use an ANCOVA approach to analyze this research question. 
+
+Examining the variables, it's clear we must include qor15-30d and approach. Age, BMI, and diabetes status are all pre-existing variables that are measure prior to the surgery, so, if we're interested in the effect of the surgery, these variables should be included in the model, so we can adjust for them. Length of stay, on the other hand, is measured after the surgery, and seems to be strongly related to quality of recovery. Patients who stay longer will tend to be patients who are having a more difficult recovery, and so adjusting for length of stay would be highly likely to obscure the true effect of the surgical approach on the QoR-15 score.
+
+## Assumption for ANCOVA
+
+In order to use ANCOVA appropriate, we must ensure the following assumptions hold
+
+1. independence of observations,
+2. linearity of the data,
+3. homogeneity of regression slopes,
+4. homogeneity of variance between groups,
+5. normality of residuals,
+6. independence of covariates from treatment,
+7. collinearity among predictors,
+8. absence of outliers.
+
+Assumptions 1 and 6 hold from the experimental design. One patient's recovery shouldn't impact another patient's recovery, and the randomized selection of surgical approach ensures that approach is independent of a patient's age, BMI, and diabetes status. We can strengthen our confidence with this assumption by checking the breakdown of the variables by approach. 
+
+```{r balance-table}
+dat %>%
+  group_by(approach) %>%
+  summarise(
+    n = n(),
+    age_mean = mean(age), age_sd = sd(age),
+    bmi_mean = mean(bmi), bmi_sd = sd(bmi),
+    pct_diabetes = mean(diabetes == "Yes") * 100
+  ) %>%
+  kable(digits = 1, caption = "Baseline characteristics by surgical approach")
+```
+
+We see that the variables are evenly divided by surgical approach, as desired. We note that this table is not proof of independence. It's just a nice sanity check on our randomization. To check linearity, we examine a scatterplot of our data.
+
+```{r linearity check}
+ggplot(dat, aes(x = age, y = qor15_30d, color = approach)) +
+ geom_point(alpha = 0.6) +
+ geom_smooth(method = "lm", se = FALSE) +
+ geom_smooth(method = "loess", se = FALSE, linetype = "dashed")
+
+ggplot(dat, aes(x = bmi, y = qor15_30d, color = approach)) +
+ geom_point(alpha = 0.6) +
+ geom_smooth(method = "lm", se = FALSE) +
+ geom_smooth(method = "loess", se = FALSE, linetype = "dashed")
+```
+We see that the data is not tightly packed on the regression line, but there's no obvious nonlinearity outside of noise in the data, so we can proceed with the linear assumption.
+
+For the other assumptions, we fit a model and examine each one.
+
+```{r model fit}
+fit <- lm(qor15_30d ~ approach + age + bmi + diabetes, data = dat)
+fit_int <- lm(qor15_30d ~ approach * age + approach * bmi + approach * diabetes, data = dat)
+Anova(fit_int, type = 3)        # look at the interaction rows
+# or compare models directly:
+anova(fit, fit_int)
+
+# Normality of residuals
+res <- residuals(fit)
+ggqqplot(res)
+shapiro.test(res)
+
+# Homogeneity of variance across groups
+leveneTest(res ~ approach, data = dat)
+
+# Multicollinearity
+vif(fit)
+```
+
+Here, we see that the interaction effects have p-values comfortably above 0.05, so we can conclude the regression slopes are homogeneous. Shapiro-Wilk comfortably confirms our normality of residuals holds. Levene's test shows a potential issue with our assumption of homogeneity of variance. The reported p-value of 0.015 provides strong evidence that our variances are not equal, so we must investigate further. We note that our subgroup sizes are equal, with 100 subjects in each. This provides some robustness against unequal variance. Furthermore, while the p-value says that a difference in variance is detectable, it doesn't state how large the difference actually is. 
+
+```{r variance investigation}
+dat %>%
+  mutate(res = residuals(fit)) %>%
+  group_by(approach) %>%
+  summarise(sd_res = sd(res), var_res = var(res))
+```
+This gives a ratio of variance of about 1.62 between the Laparoscopic and Open surgery approaches. A variance ratio of less than 2 is typically treated as minor when the group sizes are equal. The variances are unequal, but the discrepency is considered minor and ordinary least squares is more robust to unequal variances when the group sizes are equal, so we will continue with an OLS approach instead of switching to a weighted least squares approach.
+
+For multicollinearity among covariates, the results of vif() are all within the 1.0 to 1.025 range, which gives no cause for concern due to multicollinearity. For outliers, examining the scatterplots above also reveals no outliers to be concerned about.
+
+We conclude that all necessary assumptions hold well-enough to continue with a standard ANCOVA model approach. 
+
+## Fitting the Model
+
+```{r model analysis}
+Anova(fit, type = 2) 
+
+confint(pairs(emmeans(fit, ~ approach)))   # adjusted mean difference + 95% CI
+eta_squared(Anova(fit, type = 2), partial = TRUE, alternative = "two.sided")          # partial eta-squared
+
+summary(fit)    # estimates, SEs, t-tests
+confint(fit)    # 95% CIs for each coefficient
+```
+## Interpretation of the Model
+
+From the results of the ANCOVA test above, we may conclude that approach, age, and diabetes status all have a significant effect on the QoR15 score. We may not conclude that for BMI, however, we note that the p-value is marginal. While we can't conclude an effect exists due to BMI from this test, we might note it as a candidate for future testing with more power. 
+
+We do note a minor to moderate difference in QoR15 score due to the surgical approach. Laparoscopic approaches yield an estimated 6.62 point increase over open approaches in QoR15 score, with a 95% confidence interval [3.24, 9.99] after accounting for age, BMI, and diabetes status. 
