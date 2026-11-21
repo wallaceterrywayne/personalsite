@@ -3,7 +3,7 @@ title: "Pharmacy students and Math Education"
 description: "An analysis of unique problems in math education faced by students in pharmacy school"
 date: 2026-11-18
 categories: [Pharmacy, Education, Math]
-draft: False
+draft: True
 ---
 
 It is a common issue that students entering pharmacy programs struggle mightily with the calculations required by the program. Certainly, any math educator will flag weak fundamentals as the most common reason students struggle in mathematics, and pharmacy students are no different. While the math required by pharmacy programs is relatively low-level, it's embedded in a more difficult scientific context, might not have been seen by the student in years, and just a small part of a program that keeps a punishing pace.
