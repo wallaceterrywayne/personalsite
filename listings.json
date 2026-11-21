@@ -1,20 +1,19 @@
 [
   {
+    "listing": "/portfolio/index.html",
+    "items": [
+      "/portfolio/pharmacy-calculation-flowchart/index.html",
+      "/portfolio/statistics-training/index.html",
+      "/portfolio/whacc-method/index.html",
+      "/portfolio/pharmacy-practice-app/index.html"
+    ]
+  },
+  {
     "listing": "/blog/index.html",
     "items": [
       "/blog/posts/2026-11-ai-implementation-rules/index.html",
       "/blog/posts/2026-11-ai-instructor-framework/index.html",
       "/blog/posts/2026-11-welcome/index.html"
-    ]
-  },
-  {
-    "listing": "/portfolio/index.html",
-    "items": [
-      "/portfolio/pharmacy-calculation-flowchart/index.html",
-      "/portfolio/r-statistics-training/index.html",
-      "/portfolio/statistics-training/index.html",
-      "/portfolio/whacc-method/index.html",
-      "/portfolio/pharmacy-practice-app/index.html"
     ]
   }
 ]
